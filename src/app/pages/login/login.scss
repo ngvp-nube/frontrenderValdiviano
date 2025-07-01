@@ -1,0 +1,95 @@
+/* Pantalla completa y centrado perfecto */
+/* Fondo con degradado celeste */
+.login-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #ccefff, #e6f7ff, #f4fcff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+
+/* Caja de login */
+.login-box {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+}
+
+/* Título */
+.login-box h2 {
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+/* Formulario */
+.form-group {
+  text-align: left;
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border 0.3s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #3f51b5;
+}
+
+/* Botón */
+button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #3f51b5;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #303f9f;
+}
+
+/* Cabecera valdiviana */
+.login-header {
+  background-color: #1b5e20; /* verde bosque */
+  padding: 1rem;
+  margin: -2.5rem -2.5rem 2rem -2.5rem;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  color: #fff;
+  text-align: center;
+}
+
+.login-header h1 {
+  font-size: 1.3rem;
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: 1px;
+}

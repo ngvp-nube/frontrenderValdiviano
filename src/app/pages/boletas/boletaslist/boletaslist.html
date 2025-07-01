@@ -1,0 +1,28 @@
+<div class="container mt-4">
+  <h2 class="text-primary mb-4">Boletas Registradas</h2>
+
+  <div class="row g-4">
+    <div class="col-md-6 col-lg-4" *ngFor="let boleta of boletas">
+      <div class="card shadow-sm border-0 rounded-4 h-100">
+        <div class="card-body">
+          <h5 class="card-title text-primary">
+            <i class="bi bi-receipt"></i> Boleta
+          </h5>
+          <p class="mb-2"><strong>Fecha:</strong> {{ boleta.fecha }}</p>
+          <p><strong>Total:</strong> ${{ boleta.total | number:'1.0-0' }}</p>
+
+          <hr>
+
+          <ul class="list-group list-group-flush small">
+            <li class="list-group-item px-0 py-1 d-flex justify-content-between"
+                *ngFor="let item of boleta.detalles">
+              <span>{{ item.nombre }} ({{ item.cantidad  | number:'1.0-0'}}g)</span>
+              <span>${{ item.total  | number:'1.0-0' }}</span>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

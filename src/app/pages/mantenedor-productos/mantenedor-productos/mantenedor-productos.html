@@ -1,0 +1,52 @@
+<form [formGroup]="productoForm" (ngSubmit)="guardar()" class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="p-4 rounded-4 shadow-sm border bg-white">
+        <h3 class="mb-4 text-primary fw-bold">
+          <i class="bi bi-box-seam me-2"></i> Mantenedor de Producto
+        </h3>
+
+        <!-- Fila 1 -->
+        <div class="row g-4">
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Código Producto</label>
+            <input type="text" class="form-control form-control-lg rounded-3 shadow-sm"
+                   formControlName="codigo" placeholder="Ej: P001">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Nombre</label>
+            <input type="text" class="form-control form-control-lg rounded-3 shadow-sm"
+                   formControlName="nombre" placeholder="Nombre del producto">
+          </div>
+
+          <!-- Fila 2 -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Precio</label>
+            <input type="number" class="form-control form-control-lg rounded-3 shadow-sm"
+                   formControlName="precio" placeholder="Ej: 9900">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Peso (Kg)</label>
+            <input type="number" class="form-control form-control-lg rounded-3 shadow-sm"
+                   formControlName="peso" placeholder="Ej: 1.25">
+          </div>
+
+          <!-- Fila 3 -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Cantidad</label>
+            <input type="number" class="form-control form-control-lg rounded-3 shadow-sm"
+                   formControlName="cantidad" placeholder="Ej: 10">
+          </div>
+
+          <!-- Botón -->
+          <div class="col-12 text-end mt-4">
+            <button type="submit" class="btn btn-primary btn-lg px-5 rounded-3 shadow">
+              <i class="bi bi-save me-2"></i>Agregar Producto
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</form>

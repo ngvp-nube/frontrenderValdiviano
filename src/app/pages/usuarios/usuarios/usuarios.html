@@ -1,0 +1,67 @@
+<form    class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="p-4 rounded-4 shadow-sm border bg-white">
+        <h3 class="mb-4 text-primary fw-bold">
+          <i class="bi bi-person-plus me-2"></i> Registro de Usuario
+        </h3>
+
+        <div class="row g-4">
+          <!-- Nombre completo -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Nombre Completo</label>
+            <input type="text" class="form-control form-control-lg rounded-3 shadow-sm"
+                   formControlName="nombreCompleto" placeholder="Ej: Juan Pérez">
+          </div>
+
+          <!-- Nombre de usuario -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Usuario</label>
+            <input type="text" class="form-control form-control-lg rounded-3 shadow-sm"
+                   formControlName="username" placeholder="Ej: jperez">
+          </div>
+
+          <!-- Correo electrónico -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Correo Electrónico</label>
+            <input type="email" class="form-control form-control-lg rounded-3 shadow-sm"
+                   formControlName="email" placeholder="Ej: jperez@correo.com">
+          </div>
+
+          <!-- Rol / Perfil -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Rol</label>
+            <select class="form-select form-select-lg rounded-3 shadow-sm"
+                    formControlName="rol">
+              <option value="">Seleccione un rol</option>
+              <option value="admin">Administrador</option>
+              <option value="vendedor">Vendedor</option>
+              <option value="cliente">Cliente</option>
+            </select>
+          </div>
+
+          <!-- Contraseña -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Contraseña</label>
+            <input type="password" class="form-control form-control-lg rounded-3 shadow-sm"
+                   formControlName="password" placeholder="Mínimo 6 caracteres">
+          </div>
+
+          <!-- Confirmar contraseña -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Confirmar Contraseña</label>
+            <input type="password" class="form-control form-control-lg rounded-3 shadow-sm"
+                   formControlName="confirmPassword" placeholder="Repite la contraseña">
+          </div>
+
+          <!-- Botón -->
+          <div class="col-12 text-end mt-4">
+            <button type="submit" class="btn btn-success btn-lg px-5 rounded-3 shadow">
+              <i class="bi bi-check2-circle me-2"></i> Crear Usuario
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

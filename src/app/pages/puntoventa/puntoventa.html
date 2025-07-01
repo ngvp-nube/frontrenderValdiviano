@@ -1,0 +1,156 @@
+<form [formGroup]="productoForm">
+  <div > <!-- 👈 Este es el contenido imprimible -->
+
+     <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <div class="p-4 rounded-4 shadow-sm border bg-white">
+          <h3 class="mb-4 text-primary fw-bold">
+            <i class="bi bi-cash-stack me-2"></i> Registro de Venta
+          </h3>
+         
+          <div class="row g-4">
+
+            <!-- Código del producto -->
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Código Producto</label>
+              <input type="text" class="form-control form-control-lg rounded-3 shadow-sm"
+                    formControlName="codigo" placeholder="Ej: ABC123" (blur)="buscarProductoPorCodigo()"/>
+            </div>
+
+        
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Nombre Producto</label>
+              <input type="text" class="form-control form-control-lg rounded-3 shadow-sm"
+                    formControlName="nombre" placeholder="Ej: Leche entera 1L">
+            </div>
+
+            <!-- Precio unitario -->
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Precio Unitario ($)</label>
+              <input type="number" class="form-control form-control-lg rounded-3 shadow-sm"
+                    formControlName="precio" placeholder="Ej: 1500">
+            </div>
+
+            <!-- Stock disponible -->
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Cantidad (Gr)</label>
+              <input type="number" class="form-control "
+                    formControlName="cantidad" placeholder="Ej: 25" (blur)="calcularTotal()" >
+            </div>
+
+            <!-- Descripción del producto -->
+            <div class="col-md-12">
+              <label class="form-label fw-semibold">Descripción</label>
+              <textarea class="form-control form-control-lg rounded-3 shadow-sm"
+                    formControlName="descripcion" rows="2"
+                    placeholder="Ej: Producto sin lactosa, ideal para intolerantes."></textarea>
+            </div>
+
+            <!-- Total a cobrar -->
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Total a Cobrar ($)</label>
+              <input type="number" class="form-control form-control-lg rounded-3 shadow-sm"
+                    formControlName="total" placeholder="Ej: 2362.5">
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-end mt-3">
+    <button type="button" class="btn btn-success" (click)="agregarProducto()">
+      <i class="bi bi-plus-circle"></i> Agregar Producto
+    </button>
+  </div>
+
+  </div> <!-- fin de boleta-imprimible -->
+
+  <!-- Botón fuera del div imprimible -->
+  <div class="text-end mt-4 no-print">
+   <button type="button" class="btn btn-primary btn-lg px-5 rounded-3 shadow"
+        (click)="imprimirBoleta()">
+  <i class="bi bi-printer me-2"></i> Imprimir y Guardar
+</button>
+
+  </div>
+  <hr>
+ <div class="d-flex justify-content-end">
+  <h4>Total $ {{ getTotalGeneral() }}</h4>
+</div>
+
+</form>
+<!-- Tabla para mostrar lista de productos agregados -->
+<div class="mt-5">
+  <h4>Productos Agregados</h4>
+
+
+ <table class="table">
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Código</th>
+      <th>Precio Unitario</th>
+      <th>Cantidad (g)</th>
+      <th>Total</th>
+      <th>Acciones</th>  <!-- Nueva columna -->
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let prod of productosGuardados; let i = index">
+      <td>{{ prod.nombre }}</td>
+      <td>{{ prod.codigo }}</td>
+      <td> ${{ prod.precio }}</td>
+      <td>{{ prod.cantidad }}Gm</td>
+      <td>$ {{ (prod.precio * prod.cantidad / 1000)}}</td>
+      <td>
+        <button class="btn btn-edit" (click)="editarProducto(i)">
+          <i class="bi bi-pencil"></i> Editar
+        </button>
+        <button class="btn btn-delete" (click)="eliminarProducto(i)">
+          <i class="bi bi-trash"></i> Eliminar
+        </button>
+      </td>
+    </tr>
+    <tr *ngIf="productosGuardados.length === 0">
+      <td colspan="6" class="text-center">No hay productos agregados</td>
+    </tr>
+  </tbody>
+</table>
+
+</div>
+
+<div id="boleta-imprimible" class="ticket p-4" >
+  <h2 class="text-center mb-3">Valdiviano</h2>
+  <p class="text-center small">RUT: 12.345.678-9<br>Av. Juanita<br>Fono: +56 9 1234 5678</p>
+  <hr>
+
+  <p><strong>Fecha:</strong> {{ fechaHoraActual }}</p>
+
+  <hr>
+  <table class="w-100 mb-3 small">
+    <thead>
+      <tr>
+        <th class="text-start">Producto</th>
+        <th class="text-end">Prec. (K)</th>
+        <th class="text-end">Cant (G)</th>
+        <th class="text-end">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let prod of productosGuardados; let i = index">
+      <td>{{ prod.nombre }}</td>
+      <td>{{ prod.precio  }} </td>
+      <td>{{ prod.cantidad }}Gm</td>
+      <td>{{ (prod.precio * prod.cantidad / 1000) }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr>
+  <p class="text-end"><strong>Total $ {{ getTotalGeneral() }}</strong>  </p>
+  <hr>
+
+  <p class="text-center small">¡Gracias por su compra!</p>
+</div>
+

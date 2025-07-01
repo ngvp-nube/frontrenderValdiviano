@@ -1,0 +1,85 @@
+/* Contenedor principal toma toda la altura */
+.layout {
+  display: flex;
+  height: 100vh; /* altura completa de la ventana */
+  overflow: hidden; /* evita scroll del body */
+}
+
+/* Sidebar lateral */
+.sidebar {
+  width: 250px;
+  min-width: 250px;
+  transition: width 0.3s ease;
+  overflow: hidden;
+}
+
+.sidebar.collapsed {
+  width: 60px;
+  min-width: 60px;
+}
+
+/* Contenido principal */
+.main-content {
+  flex-grow: 1;
+  overflow-y: auto; /* scroll vertical solo aquí */
+  height: 100vh; /* para que tome toda la altura y se pueda scrollear */
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+
+.toggle-btn {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  color: white;
+  cursor: pointer;
+}
+
+.sidebar nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar nav a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 8px 10px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.sidebar nav a.active,
+.sidebar nav a:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.icon {
+  font-size: 1.2rem;
+}
+
+/* Contenido principal a la derecha */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #f1f4f9;
+}
+
+.header {
+  background-color: #e0f7ff;
+  padding: 20px;
+  border-bottom: 1px solid #b0dffb;
+  text-align: center;
+}
+
+.content {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto;
+}
