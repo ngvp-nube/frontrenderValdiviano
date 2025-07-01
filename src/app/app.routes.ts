@@ -3,6 +3,7 @@ import { Inicio } from './pages/inicio/inicio';
 
 export const routes: Routes = [
 
+ 
   {
     path: 'login',
     loadChildren: () =>
@@ -12,34 +13,39 @@ export const routes: Routes = [
     path: 'Inicio',
     component: Inicio, // Layout base
     children: [
-   
       {
         path: 'MantenedorProductos',
         loadChildren: () =>
-        import('./pages/mantenedor-productos//mantenedor-productos/mantenedor-productos-module')
-        .then(m => m.MantenedorProductosModule)
-      }
-      ,
+          import('./pages/mantenedor-productos/mantenedor-productos/mantenedor-productos-module')
+            .then(m => m.MantenedorProductosModule)
+      },
       {
         path: 'MantenedorUsuarios',
         loadChildren: () =>
-        import('./pages/usuarios/usuarios/usuarios-module')
-        .then(m => m.UsuariosModule)
+          import('./pages/usuarios/usuarios/usuarios-module')
+            .then(m => m.UsuariosModule)
       },
       {
         path: 'PuntoVenta',
         loadChildren: () =>
-        import('./pages/puntoventa/puntoventa-module')
-        .then(m => m.PuntoventaModule)
+          import('./pages/puntoventa/puntoventa-module')
+            .then(m => m.PuntoventaModule)
       },
       {
         path: 'ListaBoletas',
         loadChildren: () =>
-        import('./pages/boletas/boletaslist/boletaslist-module')
-        .then(m => m.BoletaslistModule)
+          import('./pages/boletas/boletaslist/boletaslist-module')
+            .then(m => m.BoletaslistModule)
       },
     ]
   },
+  // 👉 Ruta comodín al final para redireccionar si no se encuentra ninguna ruta
+  {
+    path: '**',
+    redirectTo: 'login'
+  }
+];
+
 
  
-];
+
