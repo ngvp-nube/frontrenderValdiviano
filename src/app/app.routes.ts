@@ -3,7 +3,7 @@ import { Inicio } from './pages/inicio/inicio';
 
 export const routes: Routes = [
 
- 
+  
   {
     path: 'login',
     loadChildren: () =>
