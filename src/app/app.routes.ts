@@ -11,7 +11,7 @@ export const routes: Routes = [
   },
   {
     path: 'Inicio',
-    component: Inicio, // Layout base
+    component: Inicio, 
     children: [
       {
         path: 'MantenedorProductos',
@@ -39,7 +39,6 @@ export const routes: Routes = [
       },
     ]
   },
- 
   {
     path: '**',
     redirectTo: 'login'
