@@ -45,33 +45,7 @@ export class Puntoventa {
     }
   });
   }
-// imprimirBoleta() {
-//   this.fechaHoraActual =new Date().toLocaleString();
-//   console.log("fecha", this.fechaHoraActual)
-//   const contenido = document.getElementById('boleta-imprimible')?.innerHTML;
-//   if (!contenido) return;
 
-//   const ventana = window.open('', '_blank', 'width=800,height=600');
-//   if (!ventana) return;
-
-//   ventana.document.write(`
-//     <html>
-//       <head>
-//         <title>Boleta</title>
-//         <style>
-//           body { font-family: Arial, sans-serif; margin: 20px; }
-//           .no-print { display: none; }
-//           .border { border: 1px solid #ddd; }
-//         </style>
-//       </head>
-//       <body onload="window.print(); window.onafterprint = window.close;">
-//         ${contenido}
-        
-//       </body>
-//     </html>
-//   `);
-//   ventana.document.close();
-// }
 
 guardarBoleta() {
   const detalles = this.productosGuardados.map(prod => ({
