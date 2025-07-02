@@ -39,7 +39,7 @@ export const routes: Routes = [
       },
     ]
   },
-  // 👉 Ruta comodín al final para redireccionar si no se encuentra ninguna ruta
+ 
   {
     path: '**',
     redirectTo: 'login'
