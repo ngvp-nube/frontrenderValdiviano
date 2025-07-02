@@ -263,21 +263,5 @@ getTotalGeneral(): number {
 
 
 
-// generarBoleta() {
-//     const detalles: Detalle[] = this.productos.map(p => ({
-//       nombre: p.nombre,
-//       precio: p.precio,
-//       cantidad: p.cantidad,
-//       total: p.precio * p.cantidad,
-//     }));
-
-//     const total = detalles.reduce((acc, item) => acc + item.total, 0);
-
-//     this.boleta = {
-//       total,
-//       detalles,
-//     };
-//   }
-
 
 }
