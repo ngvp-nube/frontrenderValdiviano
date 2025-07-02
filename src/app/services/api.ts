@@ -16,10 +16,10 @@ export interface Producto {
   providedIn: 'root'
 })
 export class Api {
- private apiUrl = 'http://localhost:8000/api/producto/';
-  private loginUrl = 'https://backrenderdjango.onrender.com/api/login/';
-  private searchnUrl = 'https://backrenderdjango.onrender.com/api/producto';
-  private urlboleta = 'https://backrenderdjango.onrender.com/api/boleta/';
+ private apiUrl = 'https://web-production-d1c8d.up.railway.app/api/producto/';
+  private loginUrl = 'https://web-production-d1c8d.up.railway.app/api/login/';
+  private searchnUrl = 'https://web-production-d1c8d.up.railway.app/api/producto';
+  private urlboleta = 'https://web-production-d1c8d.up.railway.app/api/boleta/';
   private loggedIn = new BehaviorSubject<boolean>(false);
   isLoggedIn$ = this.loggedIn.asObservable();
   constructor(private http: HttpClient) { }
