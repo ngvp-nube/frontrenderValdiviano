@@ -109,30 +109,65 @@ imprimirBoleta() {
   const ventana = window.open('', '_blank', 'width=800,height=600');
   if (!ventana) return;
 
-  ventana.document.write(`
-    <html>
-      <head>
-        <title>Boleta</title>
-        <style>
-          body { font-family: Arial, sans-serif; margin: 20px; }
-        </style>
-      </head>
-      <body>
-        ${contenido}
-        <script>
-          window.onload = function () {
-            setTimeout(() => {
-              window.print();
-            }, 100);
-            window.onafterprint = function () {
-              window.opener.postMessage('imprimir-completado', '*');
-              window.close();
-            };
+ventana.document.write(`
+  <html>
+    <head>
+      <title>Boleta</title>
+      <style>
+        @media print {
+          body {
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            width: 58mm; /* ancho típico de impresora térmica */
+            margin: 0;
+            padding: 5px;
+          }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+          }
+          th, td {
+            text-align: left;
+            padding: 2px 0;
+            word-break: break-word;
+          }
+          th {
+            border-bottom: 1px dashed #000;
+          }
+          hr {
+            border: none;
+            border-top: 1px dashed #000;
+            margin: 5px 0;
+          }
+          .text-center {
+            text-align: center;
+          }
+          .text-end {
+            text-align: right;
+          }
+          .small {
+            font-size: 9px;
+          }
+        }
+      </style>
+    </head>
+    <body>
+      ${contenido}
+      <script>
+        window.onload = function () {
+          setTimeout(() => {
+            window.print();
+          }, 100);
+          window.onafterprint = function () {
+            window.opener.postMessage('imprimir-completado', '*');
+            window.close();
           };
-        </script>
-      </body>
-    </html>
-  `);
+        };
+      </script>
+    </body>
+  </html>
+`);
+
   ventana.document.close();
 }
 
