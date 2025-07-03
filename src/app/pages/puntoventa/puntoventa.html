@@ -1,88 +1,84 @@
 <form [formGroup]="productoForm">
-  <div > <!-- 👈 Este es el contenido imprimible -->
-
-     <div class="row justify-content-center">
+  <div>
+    <div class="row justify-content-center">
       <div class="col-lg-10">
-        <div class="p-4 rounded-4 shadow-sm border bg-white">
-          <h3 class="mb-4 text-primary fw-bold">
+        <div class="p-3 rounded-4 shadow-sm border bg-white">
+          <h5 class="mb-3 text-primary fw-bold">
             <i class="bi bi-cash-stack me-2"></i> Registro de Venta
-          </h3>
-         
-          <div class="row g-4">
+          </h5>
 
-            <!-- Código del producto -->
-            <div class="col-md-6">
-              <label class="form-label fw-semibold">Código Producto</label>
-              <input type="text" class="form-control form-control-lg rounded-3 shadow-sm"
-                    formControlName="codigo" placeholder="Ej: ABC123" (blur)="buscarProductoPorCodigo()"/>
+          <!-- Fila de inputs pequeños -->
+          <div class="row g-2 align-items-end">
+            <div class="col-md-3">
+              <label class="form-label fw-semibold">Código</label>
+              <input type="text" class="form-control form-control-sm"
+                formControlName="codigo" placeholder="Ej: ABC123" (blur)="buscarProductoPorCodigo()" />
             </div>
 
-        
-            <div class="col-md-6">
-              <label class="form-label fw-semibold">Nombre Producto</label>
-              <input type="text" class="form-control form-control-lg rounded-3 shadow-sm"
-                    formControlName="nombre" placeholder="Ej: Leche entera 1L">
+            <div class="col-md-3">
+              <label class="form-label fw-semibold">Nombre</label>
+              <input type="text" class="form-control form-control-sm"
+                formControlName="nombre" placeholder="Ej: Leche 1L">
             </div>
 
-            <!-- Precio unitario -->
-            <div class="col-md-6">
-              <label class="form-label fw-semibold">Precio Unitario ($)</label>
-              <input type="number" class="form-control form-control-lg rounded-3 shadow-sm"
-                    formControlName="precio" placeholder="Ej: 1500">
+            <div class="col-md-2">
+              <label class="form-label fw-semibold">Precio ($)</label>
+              <input type="number" class="form-control form-control-sm"
+                formControlName="precio" placeholder="Ej: 1500">
             </div>
 
-            <!-- Stock disponible -->
-            <div class="col-md-6">
+            <div class="col-md-2">
               <label class="form-label fw-semibold">Cantidad (Gr)</label>
-              <input type="number" class="form-control "
-                    formControlName="cantidad" placeholder="Ej: 25" (blur)="calcularTotal()" >
+              <input type="number" class="form-control form-control-sm"
+                formControlName="cantidad" placeholder="Ej: 25" (blur)="calcularTotal()">
             </div>
 
-            <!-- Descripción del producto -->
+            <div class="col-md-2">
+              <label class="form-label fw-semibold">Total ($)</label>
+              <input type="number" class="form-control form-control-sm"
+                formControlName="total" placeholder="Ej: 2362">
+            </div>
+          </div>
+
+          <!-- Descripción -->
+          <div class="row mt-2">
             <div class="col-md-12">
               <label class="form-label fw-semibold">Descripción</label>
-              <textarea class="form-control form-control-lg rounded-3 shadow-sm"
-                    formControlName="descripcion" rows="2"
-                    placeholder="Ej: Producto sin lactosa, ideal para intolerantes."></textarea>
+              <textarea class="form-control form-control-sm"
+                formControlName="descripcion" rows="2"
+                placeholder="Ej: Producto sin lactosa..."></textarea>
             </div>
-
-            <!-- Total a cobrar -->
-            <div class="col-md-6">
-              <label class="form-label fw-semibold">Total a Cobrar ($)</label>
-              <input type="number" class="form-control form-control-lg rounded-3 shadow-sm"
-                    formControlName="total" placeholder="Ej: 2362.5">
-            </div>
-
           </div>
         </div>
       </div>
     </div>
 
-    <div class="text-end mt-3">
-    <button type="button" class="btn btn-success" (click)="agregarProducto()">
-      <i class="bi bi-plus-circle"></i> Agregar Producto
+    <!-- Botón agregar producto -->
+    <div class="text-end mt-2">
+      <button type="button" class="btn btn-success btn-sm" (click)="agregarProducto()">
+        <i class="bi bi-plus-circle"></i> Agregar
+      </button>
+    </div>
+  </div>
+
+  <!-- Botón de imprimir -->
+  <div class="text-end mt-3 no-print">
+    <button type="button" class="btn btn-primary btn-sm px-4 rounded-3 shadow"
+      (click)="imprimirBoleta()">
+      <i class="bi bi-printer me-2"></i> Imprimir
     </button>
   </div>
 
-  </div> <!-- fin de boleta-imprimible -->
-
-  <!-- Botón fuera del div imprimible -->
-  <div class="text-end mt-4 no-print">
-   <button type="button" class="btn btn-primary btn-lg px-5 rounded-3 shadow"
-        (click)="imprimirBoleta()">
-  <i class="bi bi-printer me-2"></i> Imprimir y Guardar
-</button>
-
-  </div>
+  <!-- Total general -->
   <hr>
- <div class="d-flex justify-content-end">
-  <h4>Total $ {{ getTotalGeneral() }}</h4>
-</div>
-
+  <div class="d-flex justify-content-end">
+    <h5>Total: ${{ getTotalGeneral() }}</h5>
+  </div>
 </form>
+
 <!-- Tabla para mostrar lista de productos agregados -->
 <div class="mt-5">
-  <h4>Productos Agregados</h4>
+  <h4>Carrito de compras</h4>
 
 
  <table class="table">

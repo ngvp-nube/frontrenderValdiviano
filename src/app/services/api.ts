@@ -20,6 +20,7 @@ export class Api {
   private loginUrl = 'https://web-production-d1c8d.up.railway.app/api/login/';
   private searchnUrl = 'https://web-production-d1c8d.up.railway.app/api/producto';
   private urlboleta = 'https://web-production-d1c8d.up.railway.app/api/boleta/';
+  private urlConabilidad = 'https://web-production-d1c8d.up.railway.app/contabilidad/total/?';
   private loggedIn = new BehaviorSubject<boolean>(false);
   isLoggedIn$ = this.loggedIn.asObservable();
   constructor(private http: HttpClient) { }
@@ -91,6 +92,12 @@ login(username: string, password: string): Observable<any> {
   return this.http.get(this.urlboleta, {headers});
 }
 
-
+GetContabilidadTotal(fecha: string): Observable<any> {
+    const headers= new HttpHeaders({
+      'Authorization': `Token ${localStorage.getItem('token')}`,
+      'Content-Type': 'application/json'
+    });
+  return this.http.get(`${this.urlConabilidad}fecha=${fecha}`,{headers});
+}
 
 }

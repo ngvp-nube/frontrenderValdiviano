@@ -55,3 +55,8 @@
 .text-end {
   text-align: right;
 }
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(40%) sepia(80%) saturate(300%) hue-rotate(180deg);
+  cursor: pointer;
+}

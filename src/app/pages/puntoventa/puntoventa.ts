@@ -76,6 +76,8 @@ imprimirBoleta() {
 
   console.log("objeto ", this.productosGuardados);
   this.fechaHoraActual = new Date().toLocaleString();
+  console.log("fecha",this.fechaHoraActual  )
+
 
   const contenido = document.getElementById('boleta-imprimible')?.innerHTML;
   if (!contenido) return;
