@@ -11,7 +11,9 @@
       id="fecha"
       name="fecha"
       [(ngModel)]="fechaSeleccionada"
+      (change)="filtrarBoletasPorFecha()"
       style="max-width: 220px;"
+      
     />
   </div>
   <!-- Botón alineado al mismo nivel -->

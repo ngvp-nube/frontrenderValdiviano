@@ -100,4 +100,17 @@ GetContabilidadTotal(fecha: string): Observable<any> {
   return this.http.get(`${this.urlConabilidad}fecha=${fecha}`,{headers});
 }
 
+
+
+
+  // list productos
+  listProducto(): Observable<any> {
+    const token = localStorage.getItem('token')
+    const headers = new HttpHeaders({
+    'Authorization': `Token ${token}`,
+    'Content-Type': 'application/json' });
+
+    return this.http.get<any>(this.apiUrl, {headers});
+  }
+
 }

@@ -35,6 +35,12 @@ export const routes: Routes = [
           import('./pages/boletas/boletaslist/boletaslist-module')
             .then(m => m.BoletaslistModule)
       },
+      {
+        path: 'Listacodigo',
+        loadChildren: () =>
+          import('./pages/listacodigo/listacodigo-module')
+            .then(m => m.ListacodigoModule)
+      },
     ]
   },
   {

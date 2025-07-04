@@ -39,6 +39,23 @@ export class Boletaslist {
 
   }
 
+filtrarBoletasPorFecha() {
+  const fechaBuscada = this.fechaSeleccionada; // "2025-07-02"
+
+  this.boletas = this.boletas.filter(boleta => {
+    const fechaBoleta = new Date(boleta.fecha);
+
+    // Obtener fecha local en formato YYYY-MM-DD
+    const yyyy = fechaBoleta.getFullYear();
+    const mm = String(fechaBoleta.getMonth() + 1).padStart(2, '0');
+    const dd = String(fechaBoleta.getDate()).padStart(2, '0');
+    const fechaLocal = `${yyyy}-${mm}-${dd}`;
+
+    return fechaLocal === fechaBuscada;
+  });
+}
+
+
   Contabilidad(){
     console.log("decha selec",this.fechaSeleccionada)
 

@@ -35,6 +35,13 @@
             <span *ngIf="!collapsed">Administracion Boletas</span>
           </a>
         </li>
+
+          <li *ngIf="rol === 'Admin' || rol === 'Ventas'  ">
+          <a routerLink="/Inicio/Listacodigo" routerLinkActive="active">
+            <span class="icon"> 🧮 </span>
+            <span *ngIf="!collapsed">Lista Codigos</span>
+          </a>
+        </li>
       </ul>
     </nav>
   </aside>
