@@ -51,7 +51,7 @@ filtrarBoletasPorFecha() {
     const dd = String(fechaBoleta.getDate()).padStart(2, '0');
     const fechaLocal = `${yyyy}-${mm}-${dd}`;
 
-    return fechaLocal === fechaBuscada;
+    return fechaLocal === fechaBuscada ;
   });
 }
 

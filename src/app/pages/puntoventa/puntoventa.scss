@@ -180,3 +180,33 @@ table.table tbody tr td.text-center {
     padding: 0;
   }
 }
+
+#boleta-imprimible {
+  color: #000 !important;        /* Fuerza color negro en todo el contenido */
+  font-weight: 500;              /* Un poco más grueso pero no demasiado */
+  font-family: Arial, sans-serif;
+}
+
+#boleta-imprimible h2,
+#boleta-imprimible strong,
+#boleta-imprimible th {
+  color: #000 !important;
+  font-weight: bold;
+}
+
+#boleta-imprimible hr {
+  border: 1px solid #000 !important;  /* Línea negra */
+}
+
+#boleta-imprimible table,
+#boleta-imprimible th,
+#boleta-imprimible td {
+  border-color: #000 !important;
+  color: #000 !important;
+}
+
+#boleta-imprimible th,
+#boleta-imprimible td {
+  padding: 2px;
+}
+

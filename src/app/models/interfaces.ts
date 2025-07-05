@@ -8,6 +8,7 @@ export interface Boleta {
   id: number;
   total: number;
   fecha: string;
+  estado: string;
   detalles: DetalleProducto[];
 }
 
