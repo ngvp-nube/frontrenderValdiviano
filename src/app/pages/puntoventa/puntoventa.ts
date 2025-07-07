@@ -16,13 +16,14 @@ import { BuscarProductoModal } from '../../buscar-producto-modal/buscar-producto
   styleUrl: './puntoventa.scss'
 })
 export class Puntoventa {
-    @ViewChild('Codigo',) inputElement!: ElementRef;
+   @ViewChild('Codigo',) inputElement!: ElementRef;
    @ViewChild('btnImprimir') btnImprimir!: ElementRef<HTMLButtonElement>;
    @ViewChild('cantidadGramos', { static: false }) cantidadGramos!: ElementRef<HTMLInputElement>;
    @ViewChild('cantidadUnidad', { static: false }) cantidadUnidad!: ElementRef<HTMLInputElement>;
 
 
   modalVisible = false;
+  readyToEnfocarCantidad = false;
   inputGramos =true;
   inputCantidad =false;
 
@@ -62,10 +63,16 @@ export class Puntoventa {
       this.guardarBoleta();
     }
   });
+  
+   
   }
-      ngAfterViewInit() {
+  ngAfterViewInit() {
+  setTimeout(() => {
     this.inputElement.nativeElement.focus();
-  }
+    this.readyToEnfocarCantidad = true;
+  }, 10); // aseguramos que el DOM esté renderizado
+}
+
 
 guardarBoleta() {
   const detalles = this.productosGuardados.map(prod => {
@@ -288,6 +295,8 @@ agregarProducto(): void {
     // ➕ Agrega el producto actualizado
     this.productosGuardados.push(nuevoProducto);
     this.editarIndex = null;
+  
+    
   } else {
     // ➕ Agrega un producto nuevo normalmente
     this.productosGuardados.push(nuevoProducto);
@@ -355,12 +364,18 @@ getTotalGeneral(): number {
 //     this.abrirModalProductos();
 //   }
 // }
+
+
+
 enfocarCantidad() {
+
   setTimeout(() => {
+   
     if (this.cantidadGramos) {
       this.inputCantidad =false;
       this.inputGramos =true;
       this.cantidadGramos?.nativeElement.focus();
+      
     
     } else if (this.cantidadUnidad) {
       this.inputGramos =false;

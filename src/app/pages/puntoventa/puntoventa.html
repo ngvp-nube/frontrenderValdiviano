@@ -12,7 +12,7 @@
             <div class="col-md-3">
               <label class="form-label fw-semibold">Código</label>
               <input type="text" #Codigo class="form-control form-control-sm" [(ngModel)]="productoSeleccionado.codigo"
-                formControlName="codigo" placeholder="Ej: ABC123" (blur)="buscarProductoPorCodigo()" (keydown.enter)="enfocarCantidad()"/>
+                formControlName="codigo" placeholder="Ej: ABC123" (blur)="buscarProductoPorCodigo()" (keydown.enter)="readyToEnfocarCantidad && enfocarCantidad()"/>
             </div>
 
             <div class="col-md-3">
@@ -59,7 +59,7 @@
 
     <!-- Botón agregar producto -->
     <div class="text-end mt-2" >
-      <button type="button"  [disabled]="!productoForm" class="btn btn-success btn-sm" #addprod (click)="agregarProducto()" >
+      <button type="button"  [disabled]="!productoForm" class="btn btn-success btn-sm" #addprod  (click)="agregarProducto()" >
         <i class="bi bi-plus-circle" ></i> Agregar
       </button>
     </div>
