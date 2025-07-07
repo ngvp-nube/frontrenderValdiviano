@@ -1,0 +1,28 @@
+<div class="modal-overlay">
+  <div class="modal-window">
+    <h4>Buscar Producto</h4>
+    <input type="text" [(ngModel)]="busqueda" (input)="filtrarProductos()" placeholder="Buscar..." class="form-control mb-2" />
+    <table class="table table-bordered table-hover">
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Nombre</th>
+        <th>Precio ($)</th>
+        <th>Peso (Kg)</th>
+        
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let producto of productosFiltrados" (dblclick)="seleccionarProducto(producto)">
+        <td>{{ producto.codigo }}</td>
+        <td>{{ producto.nombre }}</td>
+        <td>{{ producto.precio  }}</td>
+        <td>{{ producto.peso_kg }}</td>
+
+      </tr>
+    </tbody>
+  </table>
+
+    <button class="btn btn-secondary mt-2" (click)="cerrar.emit()">Cerrar</button>
+  </div>
+</div>

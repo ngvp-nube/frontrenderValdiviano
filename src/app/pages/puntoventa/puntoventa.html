@@ -11,52 +11,56 @@
           <div class="row g-2 align-items-end">
             <div class="col-md-3">
               <label class="form-label fw-semibold">Código</label>
-              <input type="text" class="form-control form-control-sm"
-                formControlName="codigo" placeholder="Ej: ABC123" (blur)="buscarProductoPorCodigo()" />
+              <input type="text" #Codigo class="form-control form-control-sm" [(ngModel)]="productoSeleccionado.codigo"
+                formControlName="codigo" placeholder="Ej: ABC123" (blur)="buscarProductoPorCodigo()" (keydown.enter)="enfocarCantidad()"/>
             </div>
 
             <div class="col-md-3">
               <label class="form-label fw-semibold">Nombre</label>
-              <input type="text" class="form-control form-control-sm"
-                formControlName="nombre" placeholder="Ej: Leche 1L">
+              <input type="text" class="form-control form-control-sm" [(ngModel)]="productoSeleccionado.nombre"
+                formControlName="nombre" readonly placeholder="Ej: Leche 1L">
             </div>
 
             <div class="col-md-2">
               <label class="form-label fw-semibold">Precio ($)</label>
-              <input type="number" class="form-control form-control-sm"
-                formControlName="precio" placeholder="Ej: 1500">
+              <input type="number" class="form-control form-control-sm" [(ngModel)]="productoSeleccionado.precio"
+                formControlName="precio" readonly placeholder="Ej: 1500">
             </div>
 
             <div class="col-md-2">
               <label class="form-label fw-semibold">Cantidad (Gr)</label>
-              <input type="number" class="form-control form-control-sm"
-                formControlName="cantidad" placeholder="Ej: 25" (blur)="calcularTotal()">
+              <input type="number" class="form-control form-control-sm" *ngIf="inputGramos"
+                formControlName="cantidad" #cantidadGramos placeholder="gramos"  (keydown.enter)="addprod.focus()">
+              
+              <input type="number" class="form-control form-control-sm" *ngIf="inputCantidad"
+                formControlName="cantidad" #cantidadUnidad placeholder="cantidad"  (keydown.enter)="addprod.focus()">
+       
             </div>
 
             <div class="col-md-2">
               <label class="form-label fw-semibold">Total ($)</label>
               <input type="number" class="form-control form-control-sm"
-                formControlName="total" placeholder="Ej: 2362">
+                formControlName="total" readonly placeholder="Ej: 2362">
             </div>
           </div>
 
           <!-- Descripción -->
-          <div class="row mt-2">
+          <!-- <div class="row mt-2">
             <div class="col-md-12">
               <label class="form-label fw-semibold">Descripción</label>
               <textarea class="form-control form-control-sm"
                 formControlName="descripcion" rows="2"
                 placeholder="Ej: Producto sin lactosa..."></textarea>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
 
     <!-- Botón agregar producto -->
-    <div class="text-end mt-2">
-      <button type="button" class="btn btn-success btn-sm" (click)="agregarProducto()">
-        <i class="bi bi-plus-circle"></i> Agregar
+    <div class="text-end mt-2" >
+      <button type="button"  [disabled]="!productoForm" class="btn btn-success btn-sm" #addprod (click)="agregarProducto()" >
+        <i class="bi bi-plus-circle" ></i> Agregar
       </button>
     </div>
   </div>
@@ -64,10 +68,9 @@
   
 
   <!-- Total general -->
+   <h4>Total ${{ getTotalGeneral() | number:'1.0-0' }}</h4>
   <hr>
-  <div class="d-flex justify-content-end">
-    <h5>Total: ${{ getTotalGeneral() }}</h5>
-  </div>
+  
 </form>
 
 <!-- Tabla para mostrar lista de productos agregados -->
@@ -76,7 +79,7 @@
   <!-- Botón de imprimir -->
   <div class="text-end mt-3 no-print">
     <button type="button" class="btn btn-primary btn-sm px-4 rounded-3 shadow"
-      (click)="imprimirBoleta()">
+      (click)="imprimirBoleta()" #btnImprimir >
       <i class="bi bi-printer me-2"></i> Imprimir
     </button>
   </div>
@@ -87,7 +90,7 @@
       <th>Nombre</th>
       <th>Código</th>
       <th>Precio Unitario</th>
-      <th>Cantidad (g)</th>
+      <th>Cantidad</th>
       <th>Total</th>
       <th>Acciones</th>  <!-- Nueva columna -->
     </tr>
@@ -97,8 +100,8 @@
       <td>{{ prod.nombre }}</td>
       <td>{{ prod.codigo }}</td>
       <td> ${{ prod.precio }}</td>
-      <td>{{ prod.cantidad }}Gm</td>
-      <td>$ {{ (prod.precio * prod.cantidad / 1000)}}</td>
+      <td>{{ prod.cantidad }}</td>
+      <td>{{ calcularTotal(prod) | number:'1.0-0' }}</td>
       <td>
         <button class="btn btn-edit" (click)="editarProducto(i)">
           <i class="bi bi-pencil"></i> Editar
@@ -129,7 +132,7 @@
       <tr>
         <th class="text-start">Producto</th>
         <th class="text-end">Prec. (K)</th>
-        <th class="text-end">Cant (G)</th>
+        <th class="text-end">Cant G / U</th>
         <th class="text-end">Total</th>
       </tr>
     </thead>
@@ -137,8 +140,8 @@
       <tr *ngFor="let prod of productosGuardados; let i = index">
       <td>{{ prod.nombre }}</td>
       <td>{{ prod.precio  }} </td>
-      <td>{{ prod.cantidad }}Gm</td>
-      <td>{{ (prod.precio * prod.cantidad / 1000) }}</td>
+      <td>{{ prod.cantidad }}</td>
+      <td>{{ calcularTotal(prod) | number:'1.0-0' }}</td>
       </tr>
     </tbody>
   </table>
@@ -150,3 +153,9 @@
   <p class="text-center small">¡Gracias por su compra!</p>
 </div>
 
+<app-buscar-producto-modal
+  *ngIf="modalVisible"
+  (productoSeleccionado)="onProductoSeleccionado($event)"
+   (cerrar)="modalVisible = false">
+  >
+</app-buscar-producto-modal>

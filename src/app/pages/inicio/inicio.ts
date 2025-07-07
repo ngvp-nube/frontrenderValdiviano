@@ -23,7 +23,11 @@ User : string|null = ""
   
    this.rol = localStorage.getItem('rol');
    this.User = localStorage.getItem('username');
-   console.log("user",this.User)
+   console.log("rollllll",this.rol)
+     
+    if (this.rol === 'Vendedor') {
+        this.router.navigate(['/Inicio/PuntoVenta']);
+    }
    
   }
 

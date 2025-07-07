@@ -1,26 +1,44 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component , ViewChild, AfterViewInit, ElementRef, HostListener} from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Api } from '../../services/api';
 import { CommonModule } from '@angular/common';
+import { BuscarProductoModal } from '../../buscar-producto-modal/buscar-producto-modal';
 
 
 
 @Component({
   selector: 'app-puntoventa',
-  imports: [CommonModule, ReactiveFormsModule],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule,FormsModule ,BuscarProductoModal],
+
   templateUrl: './puntoventa.html',
   styleUrl: './puntoventa.scss'
 })
 export class Puntoventa {
-  
+    @ViewChild('Codigo',) inputElement!: ElementRef;
+   @ViewChild('btnImprimir') btnImprimir!: ElementRef<HTMLButtonElement>;
+   @ViewChild('cantidadGramos', { static: false }) cantidadGramos!: ElementRef<HTMLInputElement>;
+   @ViewChild('cantidadUnidad', { static: false }) cantidadUnidad!: ElementRef<HTMLInputElement>;
 
-  
+
+  modalVisible = false;
+  inputGramos =true;
+  inputCantidad =false;
+
+
+  @ViewChild('inputVenta') inputVenta!: ElementRef;
   fechaHoraActual = "";
-
+  tipoventa = "";
   productoForm!: FormGroup;
   editarIndex: number | null = null;
   productosGuardados: any[] = [];
+  productoSeleccionado = {
+    nombre: '',
+    precio: '',
+    codigo: '',
+    peso_kg:''
+  };
 
 
   constructor(private fb: FormBuilder, private http: HttpClient,private api : Api) {
@@ -34,26 +52,41 @@ export class Puntoventa {
       nombre: [''],
       precio: [''],
       cantidad: [''],
-      descripcion: [''],
+      tipo_venta: [''],
       total: ['']
     });
     this.buscarProductoPorCodigo();
-     this.calcularTotal();
+    
        window.addEventListener('message', (event) => {
     if (event.data === 'imprimir-completado') {
       this.guardarBoleta();
     }
   });
   }
-
+      ngAfterViewInit() {
+    this.inputElement.nativeElement.focus();
+  }
 
 guardarBoleta() {
-  const detalles = this.productosGuardados.map(prod => ({
-    nombre: prod.nombre,
-    precio: prod.precio,
-    cantidad: prod.cantidad,
-    total: (prod.precio * prod.cantidad) / 1000  // suponiendo que "cantidad" viene en gramos
-  }));
+  const detalles = this.productosGuardados.map(prod => {
+    const tipo = prod.tipo_venta.toLowerCase(); // <- aseguras minúscula
+    const cantidad = (tipo === 'gramos' && prod.cantidad <= 10)
+  ? prod.cantidad * 1000  // Convertir kilos a gramos
+  : prod.cantidad;
+
+const subtotal = tipo === 'gramos'
+  ? (prod.precio * cantidad) / 1000
+  : (prod.precio * cantidad);
+
+
+    return {
+      nombre: prod.nombre,
+      precio: prod.precio,
+      cantidad: prod.cantidad,
+      tipo_venta: tipo,
+      total: subtotal
+    };
+  });
 
   const total = detalles.reduce((acc, item) => acc + item.total, 0);
 
@@ -65,7 +98,7 @@ guardarBoleta() {
   this.api.crearBoleta(boleta).subscribe({
     next: res => console.log('✅ Boleta guardada exitosamente', res),
     error: err => console.error('❌ Error al guardar la boleta', err)
-  }); 
+  });
 }
 
 
@@ -86,44 +119,66 @@ imprimirBoleta() {
   if (!ventana) return;
 
 ventana.document.write(`
-  <html>
+    <html>
     <head>
       <title>Boleta</title>
       <style>
         @media print {
           body {
             font-family: 'Courier New', monospace;
-            font-size: 10px;
-            width: 58mm; /* ancho típico de impresora térmica */
+            font-size: 13px;
+            width: 72mm;
             margin: 0;
-            padding: 5px;
+            padding: 8px 8px 30px 8px;
+            line-height: 1.6;
+            color: #000 !important; /* ⬅️ texto negro */
+            background: #fff !important;
           }
+
           table {
             width: 100%;
             border-collapse: collapse;
+            margin-bottom: 12px;
+            color: #000 !important;
           }
+
           th, td {
             text-align: left;
-            padding: 2px 0;
+            padding: 4px 0;
             word-break: break-word;
+            color: #000 !important;
+            border-color: #000 !important;
           }
+
           th {
-            border-bottom: 1px dashed #000;
+            border-bottom: 1px solid #000; /* ⬅️ línea negra sólida */
           }
+
           hr {
             border: none;
-            border-top: 1px dashed #000;
-            margin: 5px 0;
+            border-top: 1px solid #000; /* ⬅️ línea sólida negra */
+            margin: 12px 0;
           }
+
           .text-center {
             text-align: center;
           }
+
           .text-end {
             text-align: right;
           }
+
           .small {
-            font-size: 9px;
+            font-size: 12px;
+            line-height: 1.5;
+            color: #000 !important;
           }
+        }
+
+        /* Para pantalla (opcional) */
+        body {
+          background: #fff;
+          color: #000;
         }
       </style>
     </head>
@@ -162,8 +217,28 @@ buscarProductoPorCodigo(): void {
           nombre: producto.nombre,
           precio: producto.precio ,
           cantidad: '',
+          tipo_venta: producto.tipo_venta,
           total: producto.precio
         });
+        this.tipoventa = producto.tipo_venta
+      if (this.tipoventa === 'Gramos') {
+  this.inputGramos = true;
+  this.inputCantidad = false;
+
+  // Esperar al DOM para que el input esté presente
+  setTimeout(() => {
+    this.cantidadGramos?.nativeElement.focus();
+  });
+} else if (this.tipoventa === 'Unidad') {
+  this.inputGramos = false;
+  this.inputCantidad = true;
+
+  // Esperar al DOM para que el input esté presente
+  setTimeout(() => {
+    this.cantidadUnidad?.nativeElement.focus();
+  });
+}
+
       },
       error: err => {
         console.error('Producto no encontrado', err);
@@ -172,30 +247,39 @@ buscarProductoPorCodigo(): void {
           precio: '',
           stock: '',
           descripcion: '',
+
           total: ''
         });
       }
     });
   }
+this.enfocarCantidad();
+
+ 
 }
 
 
-calcularTotal(): void {
-  const precio = this.productoForm.get('precio')?.value;
-  console.log("precio",precio)
-  const cantidadGramos = this.productoForm.get('cantidad')?.value;
+calcularTotal(prod: any): number {
 
-  if (precio && cantidadGramos) {
-    const total = (cantidadGramos / 1000) * precio;
-    this.productoForm.patchValue({
-      total: Math.round(total)
-    });
-    console.log(`Total calculado: $${total}`);
-  } else {
-    console.log("Faltan datos para calcular el total");
+  
+let cantidad = prod.cantidad;
+
+  if (prod.tipo_venta === 'Gramos') {
+    // Si la cantidad es ≤ 10 se asume que es en kilos y se convierte a gramos
+    if (cantidad <= 10) {
+      cantidad = cantidad * 1000;
+    }
+    return (prod.precio * cantidad) / 1000;
   }
+ 
+   // Tipo "Unidad"
+  return prod.precio * cantidad;
+
+
 }
 agregarProducto(): void {
+
+  
   const nuevoProducto = this.productoForm.value;
 
   if (this.editarIndex !== null) {
@@ -231,13 +315,70 @@ eliminarProducto(index: number) {
 }
 
 getTotalGeneral(): number {
-  return this.productosGuardados.reduce((acumulador, prod) => {
-    return acumulador + (prod.precio * prod.cantidad / 1000);
+  return this.productosGuardados.reduce((acum, prod) => {
+    let cantidad = prod.cantidad;
+
+    if (prod.tipo_venta === 'Gramos' && cantidad <= 10) {
+      cantidad *= 1000; // convertir de kilos a gramos
+    }
+
+    const totalProd = prod.tipo_venta === 'Gramos'
+      ? (prod.precio * cantidad) / 1000
+      : (prod.precio * cantidad);
+
+    return acum + totalProd;
   }, 0);
 }
 
 
 
 
+
+
+
+@HostListener('window:keydown', ['$event'])
+  manejarTecla(event: KeyboardEvent) {
+    if (event.key === 'F2') {
+      event.preventDefault(); // evita comportamiento por defecto del navegador (opcional)
+      this.btnImprimir.nativeElement.click(); // simula clic al botón
+    }else if (event.key === 'F1'){
+       event.preventDefault(); // evita abrir ayuda del navegador
+    this.abrirModalProductos();
+    }
+  }
+
+
+// @HostListener('window:keydown', ['$event'])
+// manejarTeclaModal(event: KeyboardEvent) {
+//   if (event.key === 'F1') {
+//     event.preventDefault(); // evita abrir ayuda del navegador
+//     this.abrirModalProductos();
+//   }
+// }
+enfocarCantidad() {
+  setTimeout(() => {
+    if (this.cantidadGramos) {
+      this.inputCantidad =false;
+      this.inputGramos =true;
+      this.cantidadGramos?.nativeElement.focus();
+    
+    } else if (this.cantidadUnidad) {
+      this.inputGramos =false;
+      this.inputCantidad =true;
+      this.cantidadUnidad?.nativeElement.focus();
+      
+      
+    }
+  },3);
+}
+
+abrirModalProductos() {
+  this.modalVisible = true;
+}
+
+onProductoSeleccionado(producto: any) {
+  this.productoSeleccionado = { ...producto };
+  this.modalVisible = false;
+}
 
 }

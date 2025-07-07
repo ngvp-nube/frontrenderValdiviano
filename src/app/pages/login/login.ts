@@ -35,9 +35,10 @@ export class Login {
         localStorage.setItem('rol', res.user.rol);
         localStorage.setItem('username', res.user.username);
 
-        Swal.fire('Login exitoso', 'Sesión iniciada', 'success');
+        //Swal.fire('Login exitoso', 'Sesión iniciada', 'success');
         // Aquí podrías redirigir al usuario
         this.api.logeado();
+     
         this.router.navigate(['/Inicio']);
         
       },

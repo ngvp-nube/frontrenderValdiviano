@@ -10,6 +10,7 @@ export interface Producto {
   peso_kg: number;
   precio: number;
   cantidad: number;
+  tipo_venta:string;
   // Agrega aquí otros campos que tenga tu modelo
 }
 @Injectable({
@@ -21,6 +22,8 @@ export class Api {
   private searchnUrl = 'https://web-production-d1c8d.up.railway.app/api/producto';
   private urlboleta = 'https://web-production-d1c8d.up.railway.app/api/boleta/';
   private urlConabilidad = 'https://web-production-d1c8d.up.railway.app/contabilidad/total/?';
+  private urldeleteBoleta = 'https://web-production-d1c8d.up.railway.app/api/boletas/eliminar/';
+
   private loggedIn = new BehaviorSubject<boolean>(false);
   isLoggedIn$ = this.loggedIn.asObservable();
   constructor(private http: HttpClient) { }
@@ -112,5 +115,15 @@ GetContabilidadTotal(fecha: string): Observable<any> {
 
     return this.http.get<any>(this.apiUrl, {headers});
   }
+
+
+eliminarBoleta(boleta_id : number): Observable<any> {
+  const headers= new HttpHeaders({
+    'Authorization': `Token ${localStorage.getItem('token')}`,
+    'Content-Type': 'application/json'
+  });
+  const body = { boleta_id };
+  return this.http.post(this.urldeleteBoleta, body, {headers});
+}
 
 }

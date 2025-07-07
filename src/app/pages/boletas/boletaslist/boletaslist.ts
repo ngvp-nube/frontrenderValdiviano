@@ -14,6 +14,8 @@ import Swal from 'sweetalert2';
 export class Boletaslist {
     boletas: Boleta[] = [];
     total = []
+    boletasOriginales: any[] = [];
+    busquedaNumero = ""
     fechaSeleccionada: string = '';
     
   
@@ -31,6 +33,8 @@ export class Boletaslist {
     next: res => {
       this.boletas = res
       console.log("res", this.boletas)
+        this.boletasOriginales = res;
+        this.boletas = [...res];
     },
     
 
@@ -54,6 +58,23 @@ filtrarBoletasPorFecha() {
     return fechaLocal === fechaBuscada ;
   });
 }
+filtrarBoletasPorNumero() {
+  const texto = this.busquedaNumero?.toString().trim();
+
+  // Si el input está vacío, restaurar toda la lista original
+  if (!texto) {
+    this.boletas = [...this.boletasOriginales]; // <-- importante
+    return;
+  }
+
+  this.boletas = this.boletasOriginales.filter(boleta =>
+    boleta.id.toString().includes(texto)
+  );
+}
+
+
+
+
 
 
   Contabilidad(){
@@ -77,5 +98,32 @@ filtrarBoletasPorFecha() {
   }); 
 
   }
+
+ eliminarBoleta(id: number): void {
+  Swal.fire({
+    title: '¿Eliminar esta boleta?',
+    text: 'Esta acción no se puede deshacer.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Sí, eliminar',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.api.eliminarBoleta(id).subscribe({
+        next: res => {
+          Swal.fire('Eliminada', 'La boleta ha sido archivada.', 'success');
+          this.boletas = this.boletas.filter(b => b.id !== id);
+        },
+        error: err => {
+          Swal.fire('Error', 'No se pudo eliminar la boleta.', 'error');
+        }
+      });
+    }
+  });
+}
+
+
 
 }
