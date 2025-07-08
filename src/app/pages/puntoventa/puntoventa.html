@@ -100,7 +100,7 @@
       <td>{{ prod.nombre }}</td>
       <td>{{ prod.codigo }}</td>
       <td> ${{ prod.precio }}</td>
-      <td>{{ prod.cantidad }}</td>
+      <td>{{ prod.tipo_venta === 'Gramos' ? (prod.cantidad + ' g') : (prod.cantidad + ' unid.') }}</td>
       <td>{{ calcularTotal(prod) | number:'1.0-0' }}</td>
       <td>
         <button class="btn btn-edit" (click)="editarProducto(i)">
@@ -140,7 +140,7 @@
       <tr *ngFor="let prod of productosGuardados; let i = index">
       <td>{{ prod.nombre }}</td>
       <td>{{ prod.precio  }} </td>
-      <td>{{ prod.cantidad }}</td>
+      <td>{{ prod.tipo_venta === 'Gramos' ? (prod.cantidad + ' g') : (prod.cantidad + ' unid.') }}</td>
       <td>{{ calcularTotal(prod) | number:'1.0-0' }}</td>
       </tr>
     </tbody>

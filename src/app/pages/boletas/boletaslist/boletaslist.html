@@ -1,7 +1,11 @@
 <div class="container mt-4">
-<div class="d-flex align-items-center justify-content-between mt-4 flex-wrap gap-3">
+
+
+
+  <h2 class="text-primary mb-4">Boletas Registradas</h2>
+  <div class="d-flex align-items-center justify-content-between mt-4 flex-wrap gap-3">
   <!-- Label e input en línea -->
-<div class="d-flex align-items-center gap-2">
+<!-- <div class="d-flex align-items-center gap-2">
     <label for="fecha" class="form-label fw-semibold mb-0">
       <i class="bi bi-calendar-event me-1 text-primary"></i> Fecha:
     </label>
@@ -15,7 +19,7 @@
       style="max-width: 220px;"
       
     />
-  </div>
+  </div> -->
   <input
   type="text"
   class="form-control mb-2"
@@ -23,7 +27,7 @@
   (input)="filtrarBoletasPorNumero()"
   placeholder="Buscar N° de Boleta">
   <!-- Botón alineado al mismo nivel -->
-  <div>
+  <!-- <div>
     <button
       type="submit"
       class="btn btn-primary btn-lg px-5 rounded-3 shadow"
@@ -31,12 +35,9 @@
     >
       <i class="bi bi-save me-2"></i>Generar Contabilidad
     </button>
-  </div>
+  </div> -->
 </div>
 <hr>
-
-
-  <h2 class="text-primary mb-4">Boletas Registradas</h2>
   
 <div class="row g-4">
   <div class="col-md-6 col-lg-4" *ngFor="let boleta of boletas">

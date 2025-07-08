@@ -23,6 +23,7 @@ export class Api {
   private urlboleta = 'https://web-production-d1c8d.up.railway.app/api/boleta/';
   private urlConabilidad = 'https://web-production-d1c8d.up.railway.app/contabilidad/total/?';
   private urldeleteBoleta = 'https://web-production-d1c8d.up.railway.app/api/boletas/eliminar/';
+  private urlconta = 'https://web-production-d1c8d.up.railway.app';
 
   private loggedIn = new BehaviorSubject<boolean>(false);
   isLoggedIn$ = this.loggedIn.asObservable();
@@ -83,9 +84,18 @@ login(username: string, password: string): Observable<any> {
     const headers= new HttpHeaders({
       'Authorization': `Token ${localStorage.getItem('token')}`,
       'Content-Type': 'application/json'
-    });
+    }); 
   return this.http.post(this.urlboleta, boleta, {headers});
 }
+
+obtenerProductosPorFecha(fecha: string) {
+      const headers= new HttpHeaders({
+      'Authorization': `Token ${localStorage.getItem('token')}`,
+      'Content-Type': 'application/json'
+    }); 
+  return this.http.get<any>(this.urlconta+ `/api/productos-por-fecha/?fecha=${fecha}`,{headers});
+}
+
 
  ListBoleta(): Observable<any> {
     const headers= new HttpHeaders({

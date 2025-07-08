@@ -36,10 +36,10 @@
           </a>
         </li>
 
-          <li *ngIf="rol === 'Admin' || rol === 'Vendedor'  ">
+          <li *ngIf="rol === 'Admin' ">
           <a routerLink="/Inicio/Listacodigo" routerLinkActive="active">
             <span class="icon"> 🧮 </span>
-            <span *ngIf="!collapsed">Lista Codigos</span>
+            <span *ngIf="!collapsed">Contabilidad</span>
           </a>
         </li>
       </ul>

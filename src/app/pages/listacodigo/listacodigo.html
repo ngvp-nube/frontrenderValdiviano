@@ -1,24 +1,79 @@
 <div class="container mt-4">
-  <h4 class="mb-3"><i class="bi bi-journal-text me-2"></i> Lista de Productos</h4>
+  <h4 class="mb-3"><i class="bi bi-journal-text me-2"></i> Contabilidad</h4>
+<input
+  type="date"
+  class="form-control shadow-sm border-primary rounded-pill px-3"
+  id="fecha"
+  name="fecha"
+  [(ngModel)]="fechaSeleccionada"
+  style="max-width: 220px;"
+/>
 
-  <table class="table table-bordered table-hover">
-    <thead>
-      <tr>
-        <th>Código</th>
-        <th>Nombre</th>
-        <th>Precio ($)</th>
-        <th>Peso (Kg)</th>
-        <th>Cantidad</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let producto of productos">
-        <td>{{ producto.codigo }}</td>
-        <td>{{ producto.nombre }}</td>
-        <td>{{ producto.precio  }}</td>
-        <td>{{ producto.peso_kg }}</td>
-        <td>{{ producto.cantidad }}</td>
-      </tr>
-    </tbody>
-  </table>
+<div>
+  <button
+    type="button"
+    class="btn btn-primary btn-lg px-5 rounded-3 shadow"
+    (click)="generarContabilidad()"
+  >
+    <i class="bi bi-save me-2"></i>Generar Contabilidad
+  </button>
 </div>
+
+  
+</div>
+<div class="d-flex justify-content-center my-4">
+  <div id="contabilidad-imprimible" 
+       style="
+         width: 90mm; /* Aumentamos el ancho */
+         font-family: 'Courier New', monospace;
+         font-size: 15px; /* Letras un poco más grandes */
+         padding: 12px;
+         color: #000;
+         background: #fff;
+         margin: auto;
+       ">
+
+    <h4 class="text-center" style="font-size: 16px; font-weight: bold;">Valdiviano</h4>
+    <p class="text-center" style="font-size: 12px;">
+      RUT: 12.345.678-9<br>
+      Av. Juanita<br>
+      Fono: +56 9 1234 5678
+    </p>
+
+    <hr style="border-top: 1px dashed #000;">
+
+    <p><strong>Contabilidad del:</strong> {{ fechaSeleccionada }}</p>
+
+    <hr style="border-top: 1px dashed #000;">
+    <table style="width: 100%;">
+      <thead>
+        <tr>
+          <th style="text-align: left;">Producto</th>
+          <th style="text-align: right;">Precio</th>
+          <th style="text-align: center;">Cant</th>
+          <th style="text-align: right;">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let prod of productosContables">
+          <td>{{ prod.nombre }}</td>
+          <td style="text-align: right;">{{ prod.precio | number:'1.0-0' }}</td>
+          <td style="text-align: center;">{{ prod.total_cantidad }}</td>
+          <td style="text-align: right;">{{ prod.total_ventas | number:'1.0-0' }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <hr style="border-top: 1px dashed #000;">
+    <p class="text-end" style="font-weight: bold;">
+      Total: ${{ totalGeneral | number:'1.0-0' }}
+    </p>
+    <hr style="border-top: 1px dashed #000;">
+    <p class="text-center" style="font-size: 12px;">
+      Cierre de caja<br>
+      ¡Gracias!
+    </p>
+  </div>
+</div>
+
+

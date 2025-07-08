@@ -228,7 +228,7 @@ buscarProductoPorCodigo(): void {
           total: producto.precio
         });
         this.tipoventa = producto.tipo_venta
-      if (this.tipoventa === 'Gramos') {
+      if (this.tipoventa === 'Gramos' || this.tipoventa === 'gramos') {
   this.inputGramos = true;
   this.inputCantidad = false;
 
@@ -236,7 +236,7 @@ buscarProductoPorCodigo(): void {
   setTimeout(() => {
     this.cantidadGramos?.nativeElement.focus();
   });
-} else if (this.tipoventa === 'Unidad') {
+} else if (this.tipoventa === 'Unidad' || this.tipoventa === 'unidad') {
   this.inputGramos = false;
   this.inputCantidad = true;
 
@@ -276,11 +276,11 @@ let cantidad = prod.cantidad;
     if (cantidad <= 10) {
       cantidad = cantidad * 1000;
     }
-    return (prod.precio * cantidad) / 1000;
+    return Math.round((prod.precio * cantidad) / 1000);
   }
  
    // Tipo "Unidad"
-  return prod.precio * cantidad;
+  return Math.round(prod.precio * cantidad);
 
 
 }
