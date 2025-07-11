@@ -136,4 +136,19 @@ eliminarBoleta(boleta_id : number): Observable<any> {
   return this.http.post(this.urldeleteBoleta, body, {headers});
 }
 
+actualizarProducto(codigo: string, data: any) {
+  const headers= new HttpHeaders({
+    'Authorization': `Token ${localStorage.getItem('token')}`,
+    'Content-Type': 'application/json'
+  });
+  return this.http.put<any>(this.urlconta+`/producto-actualizar/${codigo}/`, data, {headers});
+}
+deleteProducto(codigo: string) {
+  const headers= new HttpHeaders({
+    'Authorization': `Token ${localStorage.getItem('token')}`,
+    'Content-Type': 'application/json'
+  });
+  return this.http.delete<any>(this.urlconta+`/api/producto/eliminar/${codigo}/`,{headers});
+}
+
 }
