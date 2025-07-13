@@ -29,7 +29,7 @@
 
             <div class="col-md-2">
               <label class="form-label fw-semibold">Cantidad (Gr)</label>
-              <input type="number" class="form-control form-control-sm" *ngIf="inputGramos"
+              <input type="text" class="form-control form-control-sm" *ngIf="inputGramos"
                 formControlName="cantidad" #cantidadGramos placeholder="gramos"  (keydown.enter)="addprod.focus()">
               
               <input type="number" class="form-control form-control-sm" *ngIf="inputCantidad"
@@ -100,8 +100,8 @@
       <td>{{ prod.nombre }}</td>
       <td>{{ prod.codigo }}</td>
       <td> ${{ prod.precio }}</td>
-      <td>{{ prod.tipo_venta === 'Gramos' ? (prod.cantidad + ' g') : (prod.cantidad + ' unid.') }}</td>
-      <td>{{ calcularTotal(prod) | number:'1.0-0' }}</td>
+      <td>{{ prod.tipo_venta === 'gramos' ? (prod.cantidad + ' g') : (prod.cantidad + ' unid.') }}</td>
+      <td>$ {{ calcularTotal(prod) | number:'1.0-0'}}</td>
       <td>
         <button class="btn btn-edit" (click)="editarProducto(i)">
           <i class="bi bi-pencil"></i> Editar
@@ -131,8 +131,8 @@
     <thead>
       <tr>
         <th class="text-start">Producto</th>
-        <th class="text-end">Prec. (K)</th>
-        <th class="text-end">Cant G / U</th>
+        <th class="text-end">Precio</th>
+        <th class="text-end">Cant </th>
         <th class="text-end">Total</th>
       </tr>
     </thead>
@@ -140,7 +140,7 @@
       <tr *ngFor="let prod of productosGuardados; let i = index">
       <td>{{ prod.nombre }}</td>
       <td>{{ prod.precio  }} </td>
-      <td>{{ prod.tipo_venta === 'Gramos' ? (prod.cantidad + ' g') : (prod.cantidad + ' unid.') }}</td>
+      <td>{{ prod.tipo_venta === 'gramos' ? (prod.cantidad + ' g') : (prod.cantidad + ' u') }}</td>
       <td>{{ calcularTotal(prod) | number:'1.0-0' }}</td>
       </tr>
     </tbody>

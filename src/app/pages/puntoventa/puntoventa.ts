@@ -4,6 +4,8 @@ import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Va
 import { Api } from '../../services/api';
 import { CommonModule } from '@angular/common';
 import { BuscarProductoModal } from '../../buscar-producto-modal/buscar-producto-modal';
+import Swal from 'sweetalert2';
+import { QzService } from '../../services/qz-service';
 
 
 
@@ -26,7 +28,7 @@ export class Puntoventa {
   readyToEnfocarCantidad = false;
   inputGramos =true;
   inputCantidad =false;
-
+  qz: any;
 
   @ViewChild('inputVenta') inputVenta!: ElementRef;
   fechaHoraActual = "";
@@ -38,7 +40,8 @@ export class Puntoventa {
     nombre: '',
     precio: '',
     codigo: '',
-    peso_kg:''
+    peso_kg:'',
+    tipo_venta:''
   };
 
 
@@ -129,65 +132,69 @@ ventana.document.write(`
     <html>
     <head>
       <title>Boleta</title>
-      <style>
-        @media print {
-          body {
-            font-family: 'Courier New', monospace;
-            font-size: 13px;
-            width: 72mm;
-            margin: 0;
-            padding: 8px 8px 30px 8px;
-            line-height: 1.6;
-            color: #000 !important; /* ⬅️ texto negro */
-            background: #fff !important;
-          }
+     <style>
+#boleta-imprimible {
+  max-width: 80mm;      /* Ajusta según ancho impresora, 58mm o 80mm */
+  margin: 0 auto;
+  padding: 6px 8px;     /* Menos padding para aprovechar espacio */
+  font-family: 'Courier New', monospace;
+  font-size: 12px;      /* Tamaño legible pero compacto */
+  line-height: 1.4;
+  color: #000;
+  background: #fff;
+  text-align: center;   /* Centramos el contenido */
+  box-sizing: border-box;
+}
 
-          table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 12px;
-            color: #000 !important;
-          }
+#boleta-imprimible h2 {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
 
-          th, td {
-            text-align: left;
-            padding: 4px 0;
-            word-break: break-word;
-            color: #000 !important;
-            border-color: #000 !important;
-          }
+#boleta-imprimible p {
+  margin: 4px 0;
+}
 
-          th {
-            border-bottom: 1px solid #000; /* ⬅️ línea negra sólida */
-          }
+#boleta-imprimible table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 8px 0;
+}
 
-          hr {
-            border: none;
-            border-top: 1px solid #000; /* ⬅️ línea sólida negra */
-            margin: 12px 0;
-          }
+#boleta-imprimible th,
+#boleta-imprimible td {
+  padding: 2px 4px;
+  border-bottom: 1px dashed #000;
+}
 
-          .text-center {
-            text-align: center;
-          }
+#boleta-imprimible th.text-start,
+#boleta-imprimible td.text-start {
+  text-align: left;
+}
 
-          .text-end {
-            text-align: right;
-          }
+#boleta-imprimible th.text-end,
+#boleta-imprimible td.text-end {
+  text-align: right;
+}
 
-          .small {
-            font-size: 12px;
-            line-height: 1.5;
-            color: #000 !important;
-          }
-        }
+#boleta-imprimible hr {
+  border: none;
+  border-top: 1px dashed #000;
+  margin: 8px 0;
+}
 
-        /* Para pantalla (opcional) */
-        body {
-          background: #fff;
-          color: #000;
-        }
-      </style>
+#boleta-imprimible p.text-end {
+  font-weight: bold;
+  text-align: right;
+}
+
+#boleta-imprimible .small {
+  font-size: 10px;
+  color: #000;
+}
+
+</style>
+
     </head>
     <body>
       ${contenido}
@@ -208,6 +215,21 @@ ventana.document.write(`
 
   ventana.document.close();
 }
+//pruebaaaa contructor , private Qz: QzServices
+// imprimirBoletaSilent() {
+//   const texto = `
+// VALDIVIANO
+// ------------------------
+// Producto: Leche
+// Precio: $1.500
+// Cantidad: 2u
+// Total: $3.000
+// ------------------------
+// Gracias por su compra
+// `;
+
+//   this.qz.printRaw(texto, 'POS-80'); // Reemplaza con el nombre real de tu impresora
+// }
 
 
 
@@ -271,7 +293,7 @@ calcularTotal(prod: any): number {
   
 let cantidad = prod.cantidad;
 
-  if (prod.tipo_venta === 'Gramos') {
+  if (prod.tipo_venta === 'gramos') {
     // Si la cantidad es ≤ 10 se asume que es en kilos y se convierte a gramos
     if (cantidad <= 10) {
       cantidad = cantidad * 1000;
@@ -285,7 +307,10 @@ let cantidad = prod.cantidad;
 
 }
 agregarProducto(): void {
-
+  if (!this.validarCantidad()) {
+    return;
+  }
+  console.log("value",this.productoForm.value)
   
   const nuevoProducto = this.productoForm.value;
 
@@ -305,6 +330,90 @@ agregarProducto(): void {
   // Limpia el formulario
   this.productoForm.reset();
 }
+
+// validarCantidad(): boolean {
+//   const cantidad = this.productoForm.get('cantidad')?.value;
+
+//   if (this.tipoventa === 'gramos') {
+//     // Validar que sea un número positivo
+//     if (!cantidad || isNaN(cantidad) || cantidad <= 0) {
+//       alert("Ingrese una cantidad válida en gramos.");
+//       return false;
+//     }
+
+//     // Si es tipo gramos, permitir solo múltiplos de 50 o 100
+//     if (cantidad % 50 !== 0) {
+//       alert("La cantidad en gramos debe ser múltiplo de 50.");
+//       return false;
+//     }
+
+//     // (Opcional) Puedes convertir si alguien pone 1, 2, 3 => a gramos reales
+//     if (cantidad < 10) {
+//       alert("¿Quiso decir gramos o kilos? Por favor, ingrese en gramos (Ej: 250, 500).");
+//       return false;
+//     }
+//   }
+
+//   if (this.inputCantidad) {
+//     // Validar enteros positivos para unidades
+//     if (!Number.isInteger(cantidad) || cantidad <= 0) {
+//       alert("Ingrese una cantidad válida en unidades.");
+//       return false;
+//     }
+//   }
+
+//   return true;
+// }
+validarCantidad(): boolean {
+  let cantidad = this.productoForm.get('cantidad')?.value;
+
+  if (this.tipoventa === 'gramos') {
+    if (!cantidad || isNaN(cantidad) || cantidad <= 0) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Cantidad inválida',
+        text: 'Ingrese una cantidad válida en gramos o kilos.'
+      });
+      return false;
+    }
+
+    if (cantidad < 10) {
+      cantidad = cantidad * 1000;
+      this.productoForm.get('cantidad')?.setValue(cantidad);
+
+      // Swal.fire({
+      //   icon: 'info',
+      //   title: 'Conversión automática',
+      //   text: `Se ha convertido a gramos: ${cantidad}g.`
+      // });
+    }
+
+    if (cantidad % 50 !== 0) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Múltiplo inválido',
+        text: 'La cantidad en gramos debe ser múltiplo de 50.'
+      });
+      return false;
+    }
+  }
+
+  if (this.tipoventa === 'unidad') {
+    if (!Number.isInteger(cantidad) || cantidad <= 0) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Cantidad inválida',
+        text: 'Ingrese una cantidad válida en unidades.'
+      });
+      return false;
+    }
+  }
+
+  return true;
+}
+
+
+
 editarProducto(index: number) {
   const prod = this.productosGuardados[index];
   // Por ejemplo, rellenar el formulario con los datos para editar:
@@ -327,11 +436,11 @@ getTotalGeneral(): number {
   return this.productosGuardados.reduce((acum, prod) => {
     let cantidad = prod.cantidad;
 
-    if (prod.tipo_venta === 'Gramos' && cantidad <= 10) {
+    if (prod.tipo_venta === 'gramos' && cantidad <= 10) {
       cantidad *= 1000; // convertir de kilos a gramos
     }
 
-    const totalProd = prod.tipo_venta === 'Gramos'
+    const totalProd = prod.tipo_venta === 'gramos'
       ? (prod.precio * cantidad) / 1000
       : (prod.precio * cantidad);
 

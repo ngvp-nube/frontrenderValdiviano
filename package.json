@@ -17,6 +17,7 @@
     "@angular/platform-browser": "^20.0.0",
     "@angular/router": "^20.0.0",
     "bootstrap-icons": "^1.13.1",
+    "qz-tray": "^2.2.5",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.6.13",
     "tslib": "^2.3.0",
@@ -35,7 +36,7 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.8.2"
   },
-    "engines": {
+  "engines": {
     "node": ">=22.12.0"
   }
 }
