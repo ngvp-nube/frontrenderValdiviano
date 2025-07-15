@@ -127,67 +127,83 @@ imprimirBoleta() {
     <head>
       <title>Boleta</title>
       <style>
-        html, body {
-          margin: 0;
-          padding: 0;
-          background: #fff;
-        }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    color: #000 !important;
+    width: 100%;
+  }
 
-        body {
-          font-family: 'Courier New', monospace;
-          font-size: 12px;
-          width: 80mm;
-          padding: 6px 8px;
-          line-height: 1.4;
-          color: #000;
-          box-sizing: border-box;
-        }
+  body {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    line-height: 1.4;
+    width: 72mm; /* más seguro que 80mm para que no corte texto */
+    margin: 0 auto; /* centrado real */
+    padding: 8px;
+    color: #000 !important;
+    -webkit-print-color-adjust: exact !important; /* asegura color */
+  }
 
-        h2 {
-          font-size: 14px;
-          margin-bottom: 8px;
-          text-align: center;
-        }
+  h2 {
+    font-size: 14px;
+    margin-bottom: 8px;
+    text-align: center;
+    color: #000 !important;
+  }
 
-        p {
-          margin: 4px 0;
-          text-align: center;
-        }
+  p {
+    margin: 4px 0;
+    text-align: center;
+    color: #000 !important;
+  }
 
-        table {
-          width: 100%;
-          border-collapse: collapse;
-          margin: 8px 0;
-        }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8px 0;
+    color: #000 !important;
+  }
 
-        th, td {
-          padding: 2px 4px;
-          border-bottom: 1px dashed #000;
-        }
+  th, td {
+    padding: 2px 4px;
+    border-bottom: 1px dashed #000;
+    color: #000 !important;
+    font-weight: normal;
+  }
 
-        th.text-start, td.text-start {
-          text-align: left;
-        }
+  th.text-start, td.text-start {
+    text-align: left;
+  }
 
-        th.text-end, td.text-end {
-          text-align: right;
-        }
+  th.text-end, td.text-end {
+    text-align: right;
+  }
 
-        hr {
-          border: none;
-          border-top: 1px dashed #000;
-          margin: 8px 0;
-        }
+  hr {
+    border: none;
+    border-top: 1px dashed #000;
+    margin: 8px 0;
+  }
 
-        p.text-end {
-          font-weight: bold;
-          text-align: right;
-        }
+  p.text-end {
+    font-weight: bold;
+    text-align: right;
+    color: #000 !important;
+  }
 
-        .small {
-          font-size: 10px;
-        }
-      </style>
+  .small {
+    font-size: 10px;
+    color: #000 !important;
+  }
+
+  /* Espacio extra para corte térmico */
+  .corte {
+    height: 40px;
+  }
+</style>
+
     </head>
     <body>
       <div class="contenido-boleta">
@@ -205,6 +221,8 @@ imprimirBoleta() {
         };
       </script>
     </body>
+    <div class="corte"></div>
+
     </html>
   `);
 
