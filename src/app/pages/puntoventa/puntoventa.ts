@@ -134,64 +134,40 @@ ventana.document.write(`
       <title>Boleta</title>
      <style>
 #boleta-imprimible {
-  max-width: 80mm;      /* Ajusta según ancho impresora, 58mm o 80mm */
+  max-width: 80mm;
   margin: 0 auto;
-  padding: 6px 8px;     /* Menos padding para aprovechar espacio */
+  padding: 4px 6px;
   font-family: 'Courier New', monospace;
-  font-size: 12px;      /* Tamaño legible pero compacto */
-  line-height: 1.4;
+  font-size: 11px;
+  line-height: 1.2;
   color: #000;
   background: #fff;
-  text-align: center;   /* Centramos el contenido */
+  text-align: center;
   box-sizing: border-box;
 }
 
 #boleta-imprimible h2 {
-  font-size: 14px;
-  margin-bottom: 8px;
+  font-size: 13px;
+  margin-bottom: 4px;
 }
 
 #boleta-imprimible p {
-  margin: 4px 0;
+  margin: 2px 0;
 }
 
 #boleta-imprimible table {
   width: 100%;
   border-collapse: collapse;
-  margin: 8px 0;
+  margin: 4px 0;
 }
 
 #boleta-imprimible th,
 #boleta-imprimible td {
-  padding: 2px 4px;
+  padding: 1px 2px;
+  font-size: 11px;
   border-bottom: 1px dashed #000;
 }
 
-#boleta-imprimible th.text-start,
-#boleta-imprimible td.text-start {
-  text-align: left;
-}
-
-#boleta-imprimible th.text-end,
-#boleta-imprimible td.text-end {
-  text-align: right;
-}
-
-#boleta-imprimible hr {
-  border: none;
-  border-top: 1px dashed #000;
-  margin: 8px 0;
-}
-
-#boleta-imprimible p.text-end {
-  font-weight: bold;
-  text-align: right;
-}
-
-#boleta-imprimible .small {
-  font-size: 10px;
-  color: #000;
-}
 
 </style>
 
