@@ -111,16 +111,10 @@ const subtotal = tipo === 'gramos'
   });
 }
 
-
 imprimirBoleta() {
-
-  
-
-
   console.log("objeto ", this.productosGuardados);
   this.fechaHoraActual = new Date().toLocaleString();
-  console.log("fecha",this.fechaHoraActual  )
-
+  console.log("fecha", this.fechaHoraActual);
 
   const contenido = document.getElementById('boleta-imprimible')?.innerHTML;
   if (!contenido) return;
@@ -128,52 +122,77 @@ imprimirBoleta() {
   const ventana = window.open('', '_blank', 'width=800,height=600');
   if (!ventana) return;
 
-ventana.document.write(`
+  ventana.document.write(`
     <html>
     <head>
       <title>Boleta</title>
-     <style>
-#boleta-imprimible {
-  max-width: 80mm;
-  margin: 0 auto;
-  padding: 4px 6px;
-  font-family: 'Courier New', monospace;
-  font-size: 11px;
-  line-height: 1.2;
-  color: #000;
-  background: #fff;
-  text-align: center;
-  box-sizing: border-box;
-}
+      <style>
+        html, body {
+          margin: 0;
+          padding: 0;
+          background: #fff;
+        }
 
-#boleta-imprimible h2 {
-  font-size: 13px;
-  margin-bottom: 4px;
-}
+        body {
+          font-family: 'Courier New', monospace;
+          font-size: 12px;
+          width: 80mm;
+          padding: 6px 8px;
+          line-height: 1.4;
+          color: #000;
+          box-sizing: border-box;
+        }
 
-#boleta-imprimible p {
-  margin: 2px 0;
-}
+        h2 {
+          font-size: 14px;
+          margin-bottom: 8px;
+          text-align: center;
+        }
 
-#boleta-imprimible table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 4px 0;
-}
+        p {
+          margin: 4px 0;
+          text-align: center;
+        }
 
-#boleta-imprimible th,
-#boleta-imprimible td {
-  padding: 1px 2px;
-  font-size: 11px;
-  border-bottom: 1px dashed #000;
-}
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          margin: 8px 0;
+        }
 
+        th, td {
+          padding: 2px 4px;
+          border-bottom: 1px dashed #000;
+        }
 
-</style>
+        th.text-start, td.text-start {
+          text-align: left;
+        }
 
+        th.text-end, td.text-end {
+          text-align: right;
+        }
+
+        hr {
+          border: none;
+          border-top: 1px dashed #000;
+          margin: 8px 0;
+        }
+
+        p.text-end {
+          font-weight: bold;
+          text-align: right;
+        }
+
+        .small {
+          font-size: 10px;
+        }
+      </style>
     </head>
     <body>
-      ${contenido}
+      <div class="contenido-boleta">
+        ${contenido}
+      </div>
       <script>
         window.onload = function () {
           setTimeout(() => {
@@ -186,11 +205,12 @@ ventana.document.write(`
         };
       </script>
     </body>
-  </html>
-`);
+    </html>
+  `);
 
   ventana.document.close();
 }
+
 //pruebaaaa contructor , private Qz: QzServices
 // imprimirBoletaSilent() {
 //   const texto = `
