@@ -24,7 +24,7 @@
             <div class="col-md-2">
               <label class="form-label fw-semibold">Precio ($)</label>
               <input type="number" class="form-control form-control-sm" [(ngModel)]="productoSeleccionado.precio"
-                formControlName="precio" readonly placeholder="Ej: 1500">
+                formControlName="precio"  placeholder="Ej: 1500">
             </div>
 
             <div class="col-md-2">
@@ -77,18 +77,22 @@
 <div class="mt-5">
   <h4>Carrito de compras</h4>
   <!-- Botón de imprimir -->
-  <div class="text-end mt-3 no-print">
-    <button type="button" class="btn btn-primary btn-sm px-4 rounded-3 shadow"
-      (click)="imprimirBoleta()" #btnImprimir >
-      <i class="bi bi-printer me-2"></i> Imprimir
-    </button>
-  </div>
+   <div class="d-flex justify-content-end gap-2 mt-3 no-print">
+  <button type="button" class="btn btn-primary btn-sm px-4 rounded-3 shadow"
+    (click)="guardarBoleta()" #btnImprimir>
+    <i class="bi bi-printer me-2"></i> Imprimir
+  </button>
+
+ 
+  <input   #inputBoleta [(ngModel)]="numeroBoleta" class="form-control form-control-sm w-auto" placeholder="Buscar boleta..." (keydown.enter)="buscarBoleta(inputBoleta.value)" />
+</div>
+
 
  <table class="table">
   <thead>
     <tr>
       <th>Nombre</th>
-      <th>Código</th>
+      <!-- <th>Código</th> -->
       <th>Precio Unitario</th>
       <th>Cantidad</th>
       <th>Total</th>
@@ -98,7 +102,7 @@
   <tbody>
     <tr *ngFor="let prod of productosGuardados; let i = index">
       <td>{{ prod.nombre }}</td>
-      <td>{{ prod.codigo }}</td>
+      <!-- <td>{{ prod.codigo }}</td> -->
       <td> ${{ prod.precio }}</td>
       <td>{{ prod.tipo_venta === 'gramos' ? (prod.cantidad + ' g') : (prod.cantidad + ' unid.') }}</td>
       <td>$ {{ calcularTotal(prod) | number:'1.0-0'}}</td>
@@ -121,7 +125,7 @@
 
 <div id="boleta-imprimible" class="ticket p-4" >
   <h2 class="text-center mb-3">Valdiviano</h2>
-  <p class="text-center mb-3">RUT: 12.345.678-9<br>Av. Juanita<br>Fono: +56 9 1234 5678</p>
+  <p class="text-center mb-3">NRO Boleta: {{ idboleta }}<br>Av. Lagunillas3166<br></p>
   <hr>
 
   <p><strong>Fecha:</strong> {{ fechaHoraActual }}</p>
@@ -137,7 +141,9 @@
       </tr>
     </thead>
     <tbody>
+      
       <tr *ngFor="let prod of productosGuardados; let i = index">
+        
       <td>{{ prod.nombre }}</td>
       <td>{{ prod.precio  }} </td>
       <td>{{ prod.tipo_venta === 'gramos' ? (prod.cantidad + ' g') : (prod.cantidad + ' u') }}</td>
@@ -151,6 +157,11 @@
   <hr>
 
   <p class="text-center small">¡Gracias por su compra!</p>
+
+
+
+
+
 </div>
 
 <app-buscar-producto-modal
@@ -159,3 +170,5 @@
    (cerrar)="modalVisible = false">
   >
 </app-buscar-producto-modal>
+
+

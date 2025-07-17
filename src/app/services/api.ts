@@ -23,6 +23,7 @@ export class Api {
   private urlboleta = 'https://web-production-d1c8d.up.railway.app/api/boleta/';
   private urlConabilidad = 'https://web-production-d1c8d.up.railway.app/contabilidad/total/?';
   private urldeleteBoleta = 'https://web-production-d1c8d.up.railway.app/api/boletas/eliminar/';
+  private urlsearchBoleta = 'https://web-production-d1c8d.up.railway.app/boletas/';
   private urlconta = 'https://web-production-d1c8d.up.railway.app';
 
   private loggedIn = new BehaviorSubject<boolean>(false);
@@ -151,4 +152,11 @@ deleteProducto(codigo: string) {
   return this.http.delete<any>(this.urlconta+`/api/producto/eliminar/${codigo}/`,{headers});
 }
 
+searchboletaforcode(codigo: string) {
+  const headers= new HttpHeaders({
+    'Authorization': `Token ${localStorage.getItem('token')}`,
+    'Content-Type': 'application/json'
+  });
+  return this.http.get(this.urlsearchBoleta+`${codigo}/`,{headers});
+}
 }

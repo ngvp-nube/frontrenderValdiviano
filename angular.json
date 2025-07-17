@@ -83,7 +83,8 @@
               "zone.js/testing"
             ],
              "scripts": [
-              "src/assets/qz-tray.js"
+              "src/assets/qz-tray.js",
+               "src/assets/conector-plugin.js"
             ],
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",

@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
-import { Component , ViewChild, AfterViewInit, ElementRef, HostListener} from '@angular/core';
+import { Component , ViewChild, AfterViewInit, ElementRef, HostListener, ChangeDetectorRef} from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Api } from '../../services/api';
 import { CommonModule } from '@angular/common';
 import { BuscarProductoModal } from '../../buscar-producto-modal/buscar-producto-modal';
 import Swal from 'sweetalert2';
-import { QzService } from '../../services/qz-service';
+import { QzService } from '../../services/ImpresoraService';
 
 
 
@@ -23,16 +23,20 @@ export class Puntoventa {
    @ViewChild('cantidadGramos', { static: false }) cantidadGramos!: ElementRef<HTMLInputElement>;
    @ViewChild('cantidadUnidad', { static: false }) cantidadUnidad!: ElementRef<HTMLInputElement>;
 
+  numeroBoleta: string = '';
+  boletaCargadaDesdeBusqueda: boolean = false;
 
   modalVisible = false;
+  boleta: any;
   readyToEnfocarCantidad = false;
   inputGramos =true;
   inputCantidad =false;
-  qz: any;
+
 
   @ViewChild('inputVenta') inputVenta!: ElementRef;
   fechaHoraActual = "";
   tipoventa = "";
+  idboleta: number=0
   productoForm!: FormGroup;
   editarIndex: number | null = null;
   productosGuardados: any[] = [];
@@ -45,7 +49,9 @@ export class Puntoventa {
   };
 
 
-  constructor(private fb: FormBuilder, private http: HttpClient,private api : Api) {
+  constructor(private fb: FormBuilder, private http: HttpClient,private api : Api,private QzService: QzService
+    ,private cdr: ChangeDetectorRef
+  ) {
     
   }
   ngOnInit(): void {
@@ -78,16 +84,33 @@ export class Puntoventa {
 
 
 guardarBoleta() {
+  if (this.productosGuardados.length === 0) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Boleta vacía',
+      text: 'Debe agregar al menos un producto antes de guardar la boleta.',
+      confirmButtonColor: '#3085d6'
+    });
+    return;
+  }
+
+  if (this.boletaCargadaDesdeBusqueda) {
+    // ✅ Reimpresión de boleta ya existente, no se guarda, solo imprime
+    this.imprimirBoleta(this.idboleta);
+    this.boletaCargadaDesdeBusqueda = false; // Limpiar estado
+    return;
+  }
+
+  // ✅ Crear boleta normalmente
   const detalles = this.productosGuardados.map(prod => {
-    const tipo = prod.tipo_venta.toLowerCase(); // <- aseguras minúscula
+    const tipo = prod.tipo_venta.toLowerCase();
     const cantidad = (tipo === 'gramos' && prod.cantidad <= 10)
-  ? prod.cantidad * 1000  // Convertir kilos a gramos
-  : prod.cantidad;
+      ? prod.cantidad * 1000
+      : prod.cantidad;
 
-const subtotal = tipo === 'gramos'
-  ? (prod.precio * cantidad) / 1000
-  : (prod.precio * cantidad);
-
+    const subtotal = tipo === 'gramos'
+      ? (prod.precio * cantidad) / 1000
+      : (prod.precio * cantidad);
 
     return {
       nombre: prod.nombre,
@@ -105,13 +128,20 @@ const subtotal = tipo === 'gramos'
     detalles: detalles
   };
 
-  this.api.crearBoleta(boleta).subscribe({
-    next: res => console.log('✅ Boleta guardada exitosamente', res),
-    error: err => console.error('❌ Error al guardar la boleta', err)
+  this.api.crearBoleta(boleta).subscribe(res => {
+    this.idboleta = res['id'];
+    this.cdr.detectChanges();
+
+    setTimeout(() => {
+      this.imprimirBoleta(this.idboleta);
+    }, 200);
   });
 }
 
-imprimirBoleta() {
+
+imprimirBoleta(id : number) {
+  console.log("idboleta ", id);
+    console.log('✅ this.idboleta', this.idboleta);
   console.log("objeto ", this.productosGuardados);
   this.fechaHoraActual = new Date().toLocaleString();
   console.log("fecha", this.fechaHoraActual);
@@ -231,22 +261,27 @@ imprimirBoleta() {
 }
 
 
-//pruebaaaa contructor , private Qz: QzServices
-// imprimirBoletaSilent() {
-//   const texto = `
-// VALDIVIANO
-// ------------------------
-// Producto: Leche
-// Precio: $1.500
-// Cantidad: 2u
-// Total: $3.000
-// ------------------------
-// Gracias por su compra
-// `;
 
-//   this.qz.printRaw(texto, 'POS-80'); // Reemplaza con el nombre real de tu impresora
+// async imprimirBoleta() {
+//   try {
+//     const impresoras = await this.QzService.obtenerImpresoras();
+//     console.log('Impresoras disponibles:', impresoras);
+
+//     const texto = `
+//       FERRETERÍA ANGEL
+//       -----------------------
+//       2x Martillo         $500
+//       1x Clavos           $200
+//       -----------------------
+//       TOTAL:              $700
+//     `;
+
+//     await this.QzService.imprimirTexto('SAM4S ELLIX20II', texto);
+//     console.log('✅ Impresión enviada');
+//   } catch (error) {
+//     console.error('❌ Error al imprimir:', error);
+//   }
 // }
-
 
 
 buscarProductoPorCodigo(): void {
@@ -326,24 +361,30 @@ agregarProducto(): void {
   if (!this.validarCantidad()) {
     return;
   }
-  console.log("value",this.productoForm.value)
-  
+
   const nuevoProducto = this.productoForm.value;
 
+  // Validamos que el formulario no esté vacío
+  if (!nuevoProducto || !nuevoProducto.nombre || !nuevoProducto.precio || !nuevoProducto.cantidad) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Producto incompleto',
+      text: 'Por favor, complete los datos del producto antes de agregarlo.',
+      confirmButtonColor: '#3085d6'
+    });
+    return;
+  }
+
+  console.log("✅ Producto a agregar:", nuevoProducto);
+
   if (this.editarIndex !== null) {
-    // 🗑️ Elimina el producto antiguo
     this.productosGuardados.splice(this.editarIndex, 1);
-    // ➕ Agrega el producto actualizado
     this.productosGuardados.push(nuevoProducto);
     this.editarIndex = null;
-  
-    
   } else {
-    // ➕ Agrega un producto nuevo normalmente
     this.productosGuardados.push(nuevoProducto);
   }
 
-  // Limpia el formulario
   this.productoForm.reset();
 }
 
@@ -520,5 +561,34 @@ onProductoSeleccionado(producto: any) {
   this.productoSeleccionado = { ...producto };
   this.modalVisible = false;
 }
+
+buscarBoleta(id: string) {
+  if (!id) return;
+
+  this.api.searchboletaforcode(id).subscribe({
+    next: (res: any) => {
+      this.idboleta = res.id;
+      this.fechaHoraActual = res.fecha;
+      this.boletaCargadaDesdeBusqueda = true; // ✅ ← Activamos la bandera
+
+      this.productosGuardados = res.detalles.map((item: any) => ({
+        codigo: item.codigo || '',
+        nombre: item.nombre,
+        precio: Number(item.precio),
+        cantidad: Number(item.cantidad),
+        tipo_venta: item.tipo_venta,
+        total: Number(item.total)
+      }));
+
+      this.numeroBoleta = "";
+    },
+    error: (err) => {
+      console.error('Error al buscar boleta:', err);
+      this.boletaCargadaDesdeBusqueda = false;
+    }
+  });
+}
+
+
 
 }

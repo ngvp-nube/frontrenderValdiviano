@@ -1,6 +1,9 @@
 export interface DetalleProducto {
+ codigo: string;
   nombre: string;
+  precio: number;
   cantidad: number;
+  tipo_venta: 'unidad' | 'gramos';
   total: number;
 }
 
