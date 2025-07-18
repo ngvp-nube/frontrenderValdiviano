@@ -1,29 +1,41 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 declare var qz: any;
 
 @Injectable({ providedIn: 'root' })
 export class QzService {
-  constructor() {
-    qz.security.setCertificatePromise(() => Promise.resolve(null));
-    qz.security.setSignaturePromise(() => Promise.resolve(null));
+  private urlFirmar = 'https://web-production-d1c8d.up.railway.app/api/firmar/';
+
+  constructor(private http: HttpClient) {
+    this.configurarSeguridad();
   }
-  private async firmarDigitalmente() {
-  qz.security.setCertificatePromise(() => {
-    return fetch('/assets/public-cert.pem')
-      .then(res => res.text());
+
+ private configurarSeguridad() {
+    // Cargar certificado público
+    qz.security.setCertificatePromise(() => {
+      return fetch('/assets/public-cert.pem').then(res => res.text());
+    });
+
+    // Firma digital real llamando a backend
+    qz.security.setSignaturePromise((toSign: string) => {
+      const token = localStorage.getItem('token') || '';
+
+      const headers = new HttpHeaders({
+        'Authorization': `Token ${token}`,
+        'Content-Type': 'application/json'
+      });
+
+  return this.http.post<{ signature: string }>(this.urlFirmar, { toSign }, { headers })
+  .toPromise()
+  .then(res => res?.signature ?? '')
+  .catch(err => {
+    console.error('Error al firmar desde backend', err);
+    return '';
   });
 
-  qz.security.setSignaturePromise((toSign: string) => {
-    return fetch('/assets/private-key.pem') // NO recomendado en producción real, solo para test.
-      .then(res => res.text())
-      .then(privateKey => {
-        const crypto = window.crypto || (window as any).msCrypto;
-        // Aquí deberías usar un sistema real de firma. Para demo, se retorna vacío.
-        return ''; // ⚠️ Esto necesita ser reemplazado por una firma válida con tu backend o WebAssembly
-      });
-  });
-}
+    });
+  }
 
   async conectar(): Promise<void> {
     if (!qz.websocket.isActive()) {
@@ -52,6 +64,4 @@ export class QzService {
 
     await qz.print(config, datos);
   }
-
-  
 }
