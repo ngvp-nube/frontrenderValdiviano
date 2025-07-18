@@ -276,7 +276,7 @@ async imprimirBoleta() {
       TOTAL:              $700
     `;
 
-    await this.QzService.imprimirTexto('SLK-TL210 en Cajacentral', texto);
+    await this.QzService.imprimirTexto('\\\\Cajacentral\\SLK-TL210', texto);
     console.log('✅ Impresión enviada');
   } catch (error) {
     console.error('❌ Error al imprimir:', error);
