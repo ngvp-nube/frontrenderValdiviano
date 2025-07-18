@@ -96,7 +96,7 @@ guardarBoleta() {
 
   if (this.boletaCargadaDesdeBusqueda) {
     // ✅ Reimpresión de boleta ya existente, no se guarda, solo imprime
-    this.imprimirBoleta(this.idboleta);
+    this.imprimirBoleta();
     this.boletaCargadaDesdeBusqueda = false; // Limpiar estado
     return;
   }
@@ -133,155 +133,155 @@ guardarBoleta() {
     this.cdr.detectChanges();
 
     setTimeout(() => {
-      this.imprimirBoleta(this.idboleta);
+      this.imprimirBoleta();
     }, 200);
   });
 }
 
 
-imprimirBoleta(id : number) {
-  console.log("idboleta ", id);
-    console.log('✅ this.idboleta', this.idboleta);
-  console.log("objeto ", this.productosGuardados);
-  this.fechaHoraActual = new Date().toLocaleString();
-  console.log("fecha", this.fechaHoraActual);
+// imprimirBoleta(id : number) {
+//   console.log("idboleta ", id);
+//     console.log('✅ this.idboleta', this.idboleta);
+//   console.log("objeto ", this.productosGuardados);
+//   this.fechaHoraActual = new Date().toLocaleString();
+//   console.log("fecha", this.fechaHoraActual);
 
-  const contenido = document.getElementById('boleta-imprimible')?.innerHTML;
-  if (!contenido) return;
+//   const contenido = document.getElementById('boleta-imprimible')?.innerHTML;
+//   if (!contenido) return;
 
-  const ventana = window.open('', '_blank', 'width=800,height=600');
-  if (!ventana) return;
+//   const ventana = window.open('', '_blank', 'width=800,height=600');
+//   if (!ventana) return;
 
-  ventana.document.write(`
-    <html>
-    <head>
-      <title>Boleta</title>
-      <style>
-        html, body {
-          margin: 0;
-          padding: 0;
-          background: #fff;
-          color: #000 !important;
-          width: 100%;
-        }
+//   ventana.document.write(`
+//     <html>
+//     <head>
+//       <title>Boleta</title>
+//       <style>
+//         html, body {
+//           margin: 0;
+//           padding: 0;
+//           background: #fff;
+//           color: #000 !important;
+//           width: 100%;
+//         }
 
-        body {
-          font-family: 'Courier New', monospace;
-          font-size: 12px;
-          line-height: 1.4;
-          width: 72mm; /* Ajustado a impresora térmica */
-          margin: 0 auto;
-          padding: 8px;
-          color: #000 !important;
-          font-weight: bold; /* ✅ Negrita global */
-          -webkit-print-color-adjust: exact !important;
-        }
+//         body {
+//           font-family: 'Courier New', monospace;
+//           font-size: 12px;
+//           line-height: 1.4;
+//           width: 72mm; /* Ajustado a impresora térmica */
+//           margin: 0 auto;
+//           padding: 8px;
+//           color: #000 !important;
+//           font-weight: bold; /* ✅ Negrita global */
+//           -webkit-print-color-adjust: exact !important;
+//         }
 
-        h2 {
-          font-size: 14px;
-          margin-bottom: 8px;
-          text-align: center;
-          color: #000 !important;
-          font-weight: bold;
-        }
+//         h2 {
+//           font-size: 14px;
+//           margin-bottom: 8px;
+//           text-align: center;
+//           color: #000 !important;
+//           font-weight: bold;
+//         }
 
-        p {
-          margin: 4px 0;
-          text-align: center;
-          color: #000 !important;
-          font-weight: bold;
-        }
+//         p {
+//           margin: 4px 0;
+//           text-align: center;
+//           color: #000 !important;
+//           font-weight: bold;
+//         }
 
-        table {
-          width: 100%;
-          border-collapse: collapse;
-          margin: 8px 0;
-          color: #000 !important;
-        }
+//         table {
+//           width: 100%;
+//           border-collapse: collapse;
+//           margin: 8px 0;
+//           color: #000 !important;
+//         }
 
-        th, td {
-          padding: 2px 4px;
-          border-bottom: 1px dashed #000;
-          color: #000 !important;
-          font-weight: bold; /* ✅ Negrita en tabla */
-        }
+//         th, td {
+//           padding: 2px 4px;
+//           border-bottom: 1px dashed #000;
+//           color: #000 !important;
+//           font-weight: bold; /* ✅ Negrita en tabla */
+//         }
 
-        th.text-start, td.text-start {
-          text-align: left;
-        }
+//         th.text-start, td.text-start {
+//           text-align: left;
+//         }
 
-        th.text-end, td.text-end {
-          text-align: right;
-        }
+//         th.text-end, td.text-end {
+//           text-align: right;
+//         }
 
-        hr {
-          border: none;
-          border-top: 1px dashed #000;
-          margin: 8px 0;
-        }
+//         hr {
+//           border: none;
+//           border-top: 1px dashed #000;
+//           margin: 8px 0;
+//         }
 
-        p.text-end {
-          text-align: right;
-          color: #000 !important;
-          font-weight: bold;
-        }
+//         p.text-end {
+//           text-align: right;
+//           color: #000 !important;
+//           font-weight: bold;
+//         }
 
-        .small {
-          font-size: 10px;
-          color: #000 !important;
-          font-weight: bold;
-        }
+//         .small {
+//           font-size: 10px;
+//           color: #000 !important;
+//           font-weight: bold;
+//         }
 
-        .corte {
-          height: 40px;
-        }
-      </style>
-    </head>
-    <body>
-      <div class="contenido-boleta">
-        ${contenido}
-      </div>
-      <div class="corte"></div>
-      <script>
-        window.onload = function () {
-          setTimeout(() => {
-            window.print();
-          }, 100);
-          window.onafterprint = function () {
-            window.opener.postMessage('imprimir-completado', '*');
-            window.close();
-          };
-        };
-      </script>
-    </body>
-    </html>
-  `);
+//         .corte {
+//           height: 40px;
+//         }
+//       </style>
+//     </head>
+//     <body>
+//       <div class="contenido-boleta">
+//         ${contenido}
+//       </div>
+//       <div class="corte"></div>
+//       <script>
+//         window.onload = function () {
+//           setTimeout(() => {
+//             window.print();
+//           }, 100);
+//           window.onafterprint = function () {
+//             window.opener.postMessage('imprimir-completado', '*');
+//             window.close();
+//           };
+//         };
+//       </script>
+//     </body>
+//     </html>
+//   `);
 
-  ventana.document.close();
-}
-
-
-
-// async imprimirBoleta() {
-//   try {
-//     const impresoras = await this.QzService.obtenerImpresoras();
-//     console.log('Impresoras disponibles:', impresoras);
-
-//     const texto = `
-//       FERRETERÍA ANGEL
-//       -----------------------
-//       2x Martillo         $500
-//       1x Clavos           $200
-//       -----------------------
-//       TOTAL:              $700
-//     `;
-
-//     await this.QzService.imprimirTexto('SAM4S ELLIX20II', texto);
-//     console.log('✅ Impresión enviada');
-//   } catch (error) {
-//     console.error('❌ Error al imprimir:', error);
-//   }
+//   ventana.document.close();
 // }
+
+
+
+async imprimirBoleta() {
+  try {
+    const impresoras = await this.QzService.obtenerImpresoras();
+    console.log('Impresoras disponibles:', impresoras);
+
+    const texto = `
+      FERRETERÍA ANGEL
+      -----------------------
+      2x Martillo         $500
+      1x Clavos           $200
+      -----------------------
+      TOTAL:              $700
+    `;
+
+    await this.QzService.imprimirTexto('SLK-TL210 en Cajacentral', texto);
+    console.log('✅ Impresión enviada');
+  } catch (error) {
+    console.error('❌ Error al imprimir:', error);
+  }
+}
 
 
 buscarProductoPorCodigo(): void {
