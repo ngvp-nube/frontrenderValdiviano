@@ -4,7 +4,10 @@ declare var qz: any;
 
 @Injectable({ providedIn: 'root' })
 export class QzService {
-  constructor() {}
+  constructor() {
+    qz.security.setCertificatePromise(() => Promise.resolve(null));
+    qz.security.setSignaturePromise(() => Promise.resolve(null));
+  }
 
   async conectar(): Promise<void> {
     if (!qz.websocket.isActive()) {
@@ -33,4 +36,6 @@ export class QzService {
 
     await qz.print(config, datos);
   }
+
+  
 }
