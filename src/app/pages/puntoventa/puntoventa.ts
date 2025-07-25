@@ -262,9 +262,9 @@ guardarBoleta() {
 
 
 
-async imprimirBoleta() {
+ imprimirBoleta() {
   try {
-    const impresoras = await this.QzService.obtenerImpresoras();
+    const impresoras =  this.QzService.obtenerImpresoras();
     console.log('Impresoras disponibles:', impresoras);
 
     const texto = `
@@ -276,7 +276,7 @@ async imprimirBoleta() {
       TOTAL:              $700
     `;
 
-    await this.QzService.imprimirTexto('\\\\Cajacentral\\SLK-TL210', texto);
+       this.QzService.imprimirTexto('\\\\Cajacentral\\SLK-TL210', texto);
     console.log('✅ Impresión enviada');
   } catch (error) {
     console.error('❌ Error al imprimir:', error);

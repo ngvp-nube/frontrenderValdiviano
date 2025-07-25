@@ -23,7 +23,7 @@ export class QzService {
 
       const headers = new HttpHeaders({
         'Authorization': `Token ${token}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json' 
       });
 
   return this.http.post<{ signature: string }>(this.urlFirmar, { toSign }, { headers })
