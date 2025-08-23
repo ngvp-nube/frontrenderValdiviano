@@ -111,3 +111,24 @@ table.table tbody tr td.text-center {
   background-color: #bb2d3b;
 }
 
+.ticket {
+  width: 72mm;                 /* Ancho típico boleta térmica */
+  max-width: 100%;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;             /* ✅ Subido de 12px a 14px */
+  line-height: 1.6;            /* Más espaciado para legibilidad */
+}
+
+.ticket h2 {
+  font-size: 18px;             /* ✅ Título más grande */
+  margin-bottom: 10px;
+}
+
+.ticket table {
+  font-size: 14px;             /* ✅ Texto tabla más grande */
+}
+
+.ticket .small {
+  font-size: 12px;             /* ✅ El mensaje final sigue un poco más chico */
+}
+

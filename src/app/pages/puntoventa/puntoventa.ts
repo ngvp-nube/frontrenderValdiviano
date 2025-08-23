@@ -152,110 +152,105 @@ imprimirBoleta(id : number) {
   const ventana = window.open('', '_blank', 'width=800,height=600');
   if (!ventana) return;
 
-  ventana.document.write(`
-    <html>
-    <head>
-      <title>Boleta</title>
-      <style>
-        html, body {
-          margin: 0;
-          padding: 0;
-          background: #fff;
-          color: #000 !important;
-          width: 100%;
-        }
+ ventana.document.write(`
+  <html>
+  <head>
+    <title>Boleta</title>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        background: #fff;
+        color: #000 !important;
+        width: 100%;
+      }
 
-        body {
-          font-family: 'Courier New', monospace;
-          font-size: 12px;
-          line-height: 1.4;
-          width: 72mm; /* Ajustado a impresora térmica */
-          margin: 0 auto;
-          padding: 8px;
-          color: #000 !important;
-          font-weight: bold; /* ✅ Negrita global */
-          -webkit-print-color-adjust: exact !important;
-        }
+      body {
+  font-family: 'Courier New', monospace;
+  font-size: 14px;   /* ✅ aumentamos aquí */
+  line-height: 1.6;  /* ✅ más espaciado */
+  width: 72mm;
+  margin: 0;
+  padding: 4px 2px 4px 0;
+  color: #000 !important;
+  font-weight: bold;
+  -webkit-print-color-adjust: exact !important;
+}
 
-        h2 {
-          font-size: 14px;
-          margin-bottom: 8px;
-          text-align: center;
-          color: #000 !important;
-          font-weight: bold;
-        }
 
-        p {
-          margin: 4px 0;
-          text-align: center;
-          color: #000 !important;
-          font-weight: bold;
-        }
+      h2, p, th, td, .small {
+        font-weight: bold !important; /* ✅ todo en negrita */
+        color: #000 !important;
+      }
 
-        table {
-          width: 100%;
-          border-collapse: collapse;
-          margin: 8px 0;
-          color: #000 !important;
-        }
+      h2 {
+        font-size: 14px;
+        margin-bottom: 8px;
+        text-align: center;
+      }
 
-        th, td {
-          padding: 2px 4px;
-          border-bottom: 1px dashed #000;
-          color: #000 !important;
-          font-weight: bold; /* ✅ Negrita en tabla */
-        }
+      p {
+        margin: 4px 0;
+        text-align: center;
+      }
 
-        th.text-start, td.text-start {
-          text-align: left;
-        }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 8px 0;
+      }
 
-        th.text-end, td.text-end {
-          text-align: right;
-        }
+      th, td {
+        padding: 2px 4px;
+        border-bottom: 1px dashed #000;
+      }
 
-        hr {
-          border: none;
-          border-top: 1px dashed #000;
-          margin: 8px 0;
-        }
+      th.text-start, td.text-start {
+        text-align: left;
+      }
 
-        p.text-end {
-          text-align: right;
-          color: #000 !important;
-          font-weight: bold;
-        }
+      th.text-end, td.text-end {
+        text-align: right;
+      }
 
-        .small {
-          font-size: 10px;
-          color: #000 !important;
-          font-weight: bold;
-        }
+      hr {
+        border: none;
+        border-top: 1px dashed #000;
+        margin: 8px 0;
+      }
 
-        .corte {
-          height: 40px;
-        }
-      </style>
-    </head>
-    <body>
-      <div class="contenido-boleta">
-        ${contenido}
-      </div>
-      <div class="corte"></div>
-      <script>
-        window.onload = function () {
-          setTimeout(() => {
-            window.print();
-          }, 100);
-          window.onafterprint = function () {
-            window.opener.postMessage('imprimir-completado', '*');
-            window.close();
-          };
+      p.text-end {
+        text-align: right;
+      }
+
+      .small {
+        font-size: 10px;
+      }
+
+      .corte {
+        height: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="contenido-boleta">
+      ${contenido}
+    </div>
+    <div class="corte"></div>
+    <script>
+      window.onload = function () {
+        setTimeout(() => {
+          window.print();
+        }, 100);
+        window.onafterprint = function () {
+          window.opener.postMessage('imprimir-completado', '*');
+          window.close();
         };
-      </script>
-    </body>
-    </html>
-  `);
+      };
+    </script>
+  </body>
+  </html>
+`);
 
   ventana.document.close();
 }

@@ -123,46 +123,47 @@
 
 </div>
 
-<div id="boleta-imprimible" class="ticket p-4" >
-  <h2 class="text-center mb-3">Valdiviano</h2>
-  <p class="text-center mb-3">NRO Boleta: {{ idboleta }}<br>Av. Lagunillas3166<br></p>
-  <hr>
+<div class="d-flex justify-content-center">
+  <div id="boleta-imprimible" class="ticket p-4">
+    <h2 class="text-center mb-3">Valdiviano</h2>
+    <p class="text-center mb-3">
+      NRO Boleta: {{ idboleta }}<br>
+      Av. Lagunillas 3166<br>
+    </p>
+    <hr>
 
-  <p><strong>Fecha:</strong> {{ fechaHoraActual }}</p>
+    <p><strong>Fecha:</strong> {{ fechaHoraActual }}</p>
 
-  <hr>
-  <table class="w-100 mb-3 small">
-    <thead>
-      <tr>
-        <th class="text-start">Producto</th>
-        <th class="text-end">Precio</th>
-        <th class="text-end">Cant </th>
-        <th class="text-end">Total</th>
-      </tr>
-    </thead>
-    <tbody>
-      
-      <tr *ngFor="let prod of productosGuardados; let i = index">
-        
-      <td>{{ prod.nombre }}</td>
-      <td>{{ prod.precio  }} </td>
-      <td>{{ prod.tipo_venta === 'gramos' ? (prod.cantidad + ' g') : (prod.cantidad + ' u') }}</td>
-      <td>{{ calcularTotal(prod) | number:'1.0-0' }}</td>
-      </tr>
-    </tbody>
-  </table>
+    <hr>
+    <table class="w-100 mb-3 ">
+      <thead>
+        <tr>
+          <th class="text-start">Producto</th>
+          <th class="text-end">Precio</th>
+          <th class="text-end">Cant</th>
+          <th class="text-end">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let prod of productosGuardados; let i = index">
+          <td class="text-start">{{ prod.nombre }}</td>
+          <td class="text-end">{{ prod.precio }}</td>
+          <td class="text-end">
+            {{ prod.tipo_venta === 'gramos' ? (prod.cantidad + ' g') : (prod.cantidad + ' u') }}
+          </td>
+          <td class="text-end">{{ calcularTotal(prod) | number:'1.0-0' }}</td>
+        </tr>
+      </tbody>
+    </table>
 
-  <hr>
-  <p class="text-end"><strong>Total $ {{ getTotalGeneral() }}</strong>  </p>
-  <hr>
+    <hr>
+    <p class="text-end"><strong>Total $ {{ getTotalGeneral() }}</strong></p>
+   
 
-  <p class="text-center small">¡Gracias por su compra!</p>
-
-
-
-
-
+    <p class="text-center ">¡Gracias por su compra!</p>
+  </div>
 </div>
+
 
 <app-buscar-producto-modal
   *ngIf="modalVisible"
