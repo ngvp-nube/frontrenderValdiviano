@@ -17,14 +17,14 @@ export interface Producto {
   providedIn: 'root'
 })
 export class Api {
- private apiUrl = 'http://192.168.1.9:8000/api/producto/';
-  private loginUrl = 'http://192.168.1.9:8000/api/login/';
-  private searchnUrl = 'http://192.168.1.9:8000/api/producto';
-  private urlboleta = 'http://192.168.1.9:8000/api/boleta/';
-  private urlConabilidad = 'http://192.168.1.9:8000/contabilidad/total/?';
-  private urldeleteBoleta = 'http://192.168.1.9:8000/api/boletas/eliminar/';
-  private urlsearchBoleta = 'http://192.168.1.9:8000/boletas/';
-  private urlconta = 'http://192.168.1.9:8000';
+ private apiUrl = 'http://192.168.1.100:8000/api/producto/';
+  private loginUrl = 'http://192.168.1.100:8000/api/login/';
+  private searchnUrl = 'http://192.168.1.100:8000/api/producto';
+  private urlboleta = 'http://192.168.1.100:8000/api/boleta/';
+  private urlConabilidad = 'http://192.168.1.100:8000/contabilidad/total/?';
+  private urldeleteBoleta = 'http://192.168.1.100:8000/api/boletas/eliminar/';
+  private urlsearchBoleta = 'http://192.168.1.100:8000/boletas/';
+  private urlconta = 'http://192.168.1.100:8000';
 
   private loggedIn = new BehaviorSubject<boolean>(false);
   isLoggedIn$ = this.loggedIn.asObservable();

@@ -29,20 +29,20 @@
             <span *ngIf="!collapsed">Punto de Venta</span>
             
           </a>
-        </li>
-         <li *ngIf="rol === 'Admin' ">
-          <a routerLink="/Inicio/ListaBoletas" routerLinkActive="active">
-            <span class="icon">🧾</span>
-            <span *ngIf="!collapsed">Administracion Boletas</span>
-          </a>
-        </li>
+        <li *ngIf="rol === 'Admin'">
+  <a routerLink="/Inicio/ListaBoletas" routerLinkActive="active">
+    <span class="icon"><i class="fas fa-file-alt"></i></span>
+    <span *ngIf="!collapsed">Administracion Boletas</span>
+  </a>
+</li>
 
-          <li *ngIf="rol === 'Admin' ">
-          <a routerLink="/Inicio/Listacodigo" routerLinkActive="active">
-            <span class="icon"> 🧮 </span>
-            <span *ngIf="!collapsed">Contabilidad</span>
-          </a>
-        </li>
+<li *ngIf="rol === 'Admin'">
+  <a routerLink="/Inicio/Listacodigo" routerLinkActive="active">
+    <span class="icon"><i class="fas fa-calculator"></i></span>
+    <span *ngIf="!collapsed">Contabilidad</span>
+  </a>
+</li>
+
       </ul>
     </nav>
   </aside>
