@@ -148,9 +148,10 @@
         <tr *ngFor="let prod of productosGuardados; let i = index">
           <td class="text-start">{{ prod.nombre }}</td>
           <td class="text-end">{{ prod.precio }}</td>
-          <td class="text-end">
-            {{ prod.tipo_venta === 'gramos' ? (prod.cantidad + ' g') : (prod.cantidad + ' u') }}
-          </td>
+          <td class="text-end smaller-text">
+  {{ prod.cantidad }}&nbsp;{{ prod.tipo_venta === 'gramos' ? 'g' : 'u' }}
+</td>
+
           <td class="text-end">{{ calcularTotal(prod) | number:'1.0-0' }}</td>
         </tr>
       </tbody>

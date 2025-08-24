@@ -139,9 +139,9 @@ guardarBoleta() {
 }
 
 
-imprimirBoleta(id : number) {
+imprimirBoleta(id: number) {
   console.log("idboleta ", id);
-    console.log('✅ this.idboleta', this.idboleta);
+  console.log('✅ this.idboleta', this.idboleta);
   console.log("objeto ", this.productosGuardados);
   this.fechaHoraActual = new Date().toLocaleString();
   console.log("fecha", this.fechaHoraActual);
@@ -149,111 +149,106 @@ imprimirBoleta(id : number) {
   const contenido = document.getElementById('boleta-imprimible')?.innerHTML;
   if (!contenido) return;
 
-  const ventana = window.open('', '_blank', 'width=800,height=600');
-  if (!ventana) return;
+  const iframe = document.createElement('iframe');
+  iframe.style.position = 'absolute';
+  iframe.style.width = '0px';
+  iframe.style.height = '0px';
+  iframe.style.border = 'none';
+  document.body.appendChild(iframe);
 
- ventana.document.write(`
-  <html>
-  <head>
-    <title>Boleta</title>
-    <style>
-      html, body {
-        margin: 0;
-        padding: 0;
-        background: #fff;
-        color: #000 !important;
-        width: 100%;
-      }
+  const doc = iframe.contentWindow?.document;
+  if (!doc) return;
 
-      body {
-  font-family: 'Courier New', monospace;
-  font-size: 14px;   /* ✅ aumentamos aquí */
-  line-height: 1.6;  /* ✅ más espaciado */
-  width: 72mm;
-  margin: 0;
-  padding: 4px 2px 4px 0;
-  color: #000 !important;
-  font-weight: bold;
-  -webkit-print-color-adjust: exact !important;
+  doc.open();
+  doc.write(`
+    <html>
+      <head>
+        <title>Boleta</title>
+        <style>
+          html, body {
+            margin: 0;
+            padding: 0;
+            background: #fff;
+            color: #000 !important;
+            width: 100%;
+          }
+          body {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            width: 72mm;
+            margin: 0;
+            padding: 4px 2px 4px 0;
+            color: #000 !important;
+            font-weight: bold;
+            -webkit-print-color-adjust: exact !important;
+          }
+          h2, p, th, td, .small {
+            font-weight: bold !important;
+            color: #000 !important;
+          }
+          h2 {
+            font-size: 14px;
+            margin-bottom: 8px;
+            text-align: center;
+          }
+          p {
+            margin: 4px 0;
+            text-align: center;
+          }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 8px 0;
+          }
+          th, td {
+            padding: 2px 4px;
+            border-bottom: 1px dashed #000;
+          }
+          th.text-start, td.text-start {
+            text-align: left;
+          }
+          th.text-end, td.text-end {
+            text-align: right;
+          }
+          hr {
+            border: none;
+            border-top: 1px dashed #000;
+            margin: 8px 0;
+          }
+          p.text-end {
+            text-align: right;
+          }
+          .small {
+            font-size: 10px;
+          }
+          .corte {
+            height: 40px;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="contenido-boleta">
+          ${contenido}
+        </div>
+        <div class="corte"></div>
+        <script>
+          window.onload = function () {
+            setTimeout(() => {
+              window.print();
+            }, 100);
+            window.onafterprint = function () {
+              window.close();
+            };
+          };
+        </script>
+      </body>
+    </html>
+  `);
+  doc.close();
+  
 }
 
-
-      h2, p, th, td, .small {
-        font-weight: bold !important; /* ✅ todo en negrita */
-        color: #000 !important;
-      }
-
-      h2 {
-        font-size: 14px;
-        margin-bottom: 8px;
-        text-align: center;
-      }
-
-      p {
-        margin: 4px 0;
-        text-align: center;
-      }
-
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 8px 0;
-      }
-
-      th, td {
-        padding: 2px 4px;
-        border-bottom: 1px dashed #000;
-      }
-
-      th.text-start, td.text-start {
-        text-align: left;
-      }
-
-      th.text-end, td.text-end {
-        text-align: right;
-      }
-
-      hr {
-        border: none;
-        border-top: 1px dashed #000;
-        margin: 8px 0;
-      }
-
-      p.text-end {
-        text-align: right;
-      }
-
-      .small {
-        font-size: 10px;
-      }
-
-      .corte {
-        height: 40px;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="contenido-boleta">
-      ${contenido}
-    </div>
-    <div class="corte"></div>
-    <script>
-      window.onload = function () {
-        setTimeout(() => {
-          window.print();
-        }, 100);
-        window.onafterprint = function () {
-          window.opener.postMessage('imprimir-completado', '*');
-          window.close();
-        };
-      };
-    </script>
-  </body>
-  </html>
-`);
-
-  ventana.document.close();
-}
 
 
 

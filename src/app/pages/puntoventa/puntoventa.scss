@@ -1,7 +1,7 @@
 .ticket {
-  width: 300px;
+  width: 280px; /* más estrecho para impresoras térmicas pequeñas */
   font-family: 'Courier New', Courier, monospace;
-  font-size: 14px;
+  font-size: 12px; /* fuente general más pequeña */
   background: white;
   color: black;
   border: 1px dashed #333;
@@ -9,7 +9,7 @@
 
 hr {
   border-top: 1px dashed #333;
-  margin: 10px 0;
+  margin: 8px 0;
 }
 
 .text-center {
@@ -21,9 +21,23 @@ hr {
 .text-start {
   text-align: left;
 }
-.small {
-  font-size: 12px;
+
+.smaller-text {
+  font-size: 11px;
+  white-space: nowrap;
 }
+
+table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+th, td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 2px;
+}
+
 /* Oculta el contenido normalmente */
 #boleta-imprimible {
   display: none;
