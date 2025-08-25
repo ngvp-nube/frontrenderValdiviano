@@ -30,17 +30,18 @@
             <div class="col-md-2">
               <label class="form-label fw-semibold">Cantidad (Gr)</label>
               <input type="text" class="form-control form-control-sm" *ngIf="inputGramos"
-                formControlName="cantidad" #cantidadGramos placeholder="gramos"  (keydown.enter)="addprod.focus()">
-              
-              <input type="number" class="form-control form-control-sm" *ngIf="inputCantidad"
-                formControlName="cantidad" #cantidadUnidad placeholder="cantidad"  (keydown.enter)="addprod.focus()">
-       
+  formControlName="cantidad" #cantidadGramos placeholder="gramos"
+  (keydown.enter)="calcularSubtotalYEnfocarTotal()">
+
+<input type="number" class="form-control form-control-sm" *ngIf="inputCantidad"
+  formControlName="cantidad" #cantidadUnidad placeholder="cantidad"
+  (keydown.enter)="calcularSubtotalYEnfocarTotal()">
             </div>
 
             <div class="col-md-2">
               <label class="form-label fw-semibold">Total ($)</label>
-              <input type="number" class="form-control form-control-sm"
-                formControlName="total" readonly placeholder="Ej: 2362">
+              <input type="number" class="form-control form-control-sm" #totalInput
+                formControlName="total" readonly placeholder="Ej: 2362" (keydown.enter)="addprod.focus()" >
             </div>
           </div>
 
@@ -127,7 +128,7 @@
   <div id="boleta-imprimible" class="ticket p-4">
     <h2 class="text-center mb-3">Valdiviano</h2>
     <p class="text-center mb-3">
-      NRO Boleta: {{ idboleta }}<br>
+      NRO Venta: {{ idboleta }}<br>
       Av. Lagunillas 3166<br>
     </p>
     <hr>

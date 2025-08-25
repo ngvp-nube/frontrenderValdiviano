@@ -22,6 +22,7 @@ export class Puntoventa {
    @ViewChild('btnImprimir') btnImprimir!: ElementRef<HTMLButtonElement>;
    @ViewChild('cantidadGramos', { static: false }) cantidadGramos!: ElementRef<HTMLInputElement>;
    @ViewChild('cantidadUnidad', { static: false }) cantidadUnidad!: ElementRef<HTMLInputElement>;
+   @ViewChild('totalInput') totalInput!: ElementRef<HTMLInputElement>;
 
   numeroBoleta: string = '';
   boletaCargadaDesdeBusqueda: boolean = false;
@@ -347,36 +348,37 @@ let cantidad = prod.cantidad;
 
 
 }
-agregarProducto(): void {
-  if (!this.validarCantidad()) {
-    return;
-  }
 
-  const nuevoProducto = this.productoForm.value;
+// agregarProducto(): void {
+//   if (!this.validarCantidad()) {
+//     return;
+//   }
 
-  // Validamos que el formulario no esté vacío
-  if (!nuevoProducto || !nuevoProducto.nombre || !nuevoProducto.precio || !nuevoProducto.cantidad) {
-    Swal.fire({
-      icon: 'warning',
-      title: 'Producto incompleto',
-      text: 'Por favor, complete los datos del producto antes de agregarlo.',
-      confirmButtonColor: '#3085d6'
-    });
-    return;
-  }
+//   const nuevoProducto = this.productoForm.value;
 
-  console.log("✅ Producto a agregar:", nuevoProducto);
+//   // Validamos que el formulario no esté vacío
+//   if (!nuevoProducto || !nuevoProducto.nombre || !nuevoProducto.precio || !nuevoProducto.cantidad) {
+//     Swal.fire({
+//       icon: 'warning',
+//       title: 'Producto incompleto',
+//       text: 'Por favor, complete los datos del producto antes de agregarlo.',
+//       confirmButtonColor: '#3085d6'
+//     });
+//     return;
+//   }
 
-  if (this.editarIndex !== null) {
-    this.productosGuardados.splice(this.editarIndex, 1);
-    this.productosGuardados.push(nuevoProducto);
-    this.editarIndex = null;
-  } else {
-    this.productosGuardados.push(nuevoProducto);
-  }
+//   console.log("✅ Producto a agregar:", nuevoProducto);
 
-  this.productoForm.reset();
-}
+//   if (this.editarIndex !== null) {
+//     this.productosGuardados.splice(this.editarIndex, 1);
+//     this.productosGuardados.push(nuevoProducto);
+//     this.editarIndex = null;
+//   } else {
+//     this.productosGuardados.push(nuevoProducto);
+//   }
+
+//   this.productoForm.reset();
+// }
 
 // validarCantidad(): boolean {
 //   const cantidad = this.productoForm.get('cantidad')?.value;
@@ -435,14 +437,14 @@ validarCantidad(): boolean {
       // });
     }
 
-    if (cantidad % 50 !== 0) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Múltiplo inválido',
-        text: 'La cantidad en gramos debe ser múltiplo de 50.'
-      });
-      return false;
-    }
+    // if (cantidad % 50 !== 0) {
+    //   Swal.fire({
+    //     icon: 'warning',
+    //     title: 'Múltiplo inválido',
+    //     text: 'La cantidad en gramos debe ser múltiplo de 50.'
+    //   });
+    //   return false;
+    // }
   }
 
   if (this.tipoventa === 'unidad') {
@@ -469,10 +471,12 @@ editarProducto(index: number) {
     codigo: prod.codigo,
     precio: prod.precio,
     cantidad: prod.cantidad,
+    total: parseFloat(prod.total.toFixed(2))
     // otros campos...
   });
   // Guarda el índice para luego actualizar el producto en vez de agregar uno nuevo
     this.editarIndex = index;
+    
 }
 
 eliminarProducto(index: number) {
@@ -531,17 +535,99 @@ enfocarCantidad() {
       this.inputCantidad =false;
       this.inputGramos =true;
       this.cantidadGramos?.nativeElement.focus();
-      
+   
     
     } else if (this.cantidadUnidad) {
       this.inputGramos =false;
       this.inputCantidad =true;
       this.cantidadUnidad?.nativeElement.focus();
       
+     
       
     }
+   
   },3);
 }
+calcularSubtotalYEnfocarTotal() {
+  // 1. Obtener los valores del formulario
+  const precio = this.productoForm.get('precio')?.value;
+  const cantidad = this.productoForm.get('cantidad')?.value;
+  const tipoVenta = this.productoForm.get('tipo_venta')?.value;
+
+  // 2. Crear un objeto para pasar a tu método `calcularTotal()`
+  const productoParaCalculo = {
+    precio: precio,
+    cantidad: cantidad,
+    tipo_venta: tipoVenta
+  };
+
+  // 3. Calcular el subtotal del producto actual
+  const subtotal = this.calcularTotal(productoParaCalculo);
+
+  // 4. Actualizar el FormControl 'total' con el subtotal calculado
+  this.productoForm.get('total')?.setValue(subtotal);
+
+  // 5. Mover el foco al input del total para que el usuario pueda verlo
+  setTimeout(() => {
+    this.totalInput.nativeElement.focus();
+  }, 3);
+}
+
+// ...
+// Ahora, en tu método `agregarProducto()`, debes asegurarte de que
+// el producto se agregue con el campo `total` ya calculado.
+// Así, `getTotalGeneral()` solo tiene que sumar los totales de la lista.
+agregarProducto(): void {
+  if (!this.validarCantidad()) {
+    return;
+  }
+
+  // Obtener el producto del formulario
+  const nuevoProducto = this.productoForm.value;
+
+  // Validar si el formulario está incompleto
+  if (!nuevoProducto || !nuevoProducto.nombre || !nuevoProducto.precio || !nuevoProducto.cantidad) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Producto incompleto',
+      text: 'Por favor, complete los datos del producto antes de agregarlo.',
+      confirmButtonColor: '#3085d6'
+    });
+    return;
+  }
+
+  // ✅ Calcular el total individual del producto antes de agregarlo
+  const totalProducto = this.calcularTotal(nuevoProducto);
+  nuevoProducto.total = totalProducto; // Asignar el total al objeto del producto
+  console.log("nuevo total" ,nuevoProducto.total)
+  // Lógica para agregar o editar el producto en la lista
+  if (this.editarIndex !== null) {
+    this.productosGuardados.splice(this.editarIndex, 1, nuevoProducto);
+    this.editarIndex = null;
+  } else {
+    this.productosGuardados.push(nuevoProducto);
+  }
+
+  
+
+  // Actualizar el total general de la boleta después de un cambio
+  this.actualizarTotalGeneralDeBoleta();
+
+  // Enfocar el input de código para el próximo producto
+  setTimeout(() => {
+    this.inputElement.nativeElement.focus();
+  }, 10);
+  // Resetear el formulario para el próximo producto
+  this.productoForm.reset();
+}
+
+// Nuevo método para manejar la actualización del total general de la boleta
+actualizarTotalGeneralDeBoleta() {
+ 
+  const totalBoleta = this.getTotalGeneral();
+  this.productoForm.get('total')?.setValue(parseFloat(totalBoleta.toFixed(2)));
+}
+
 
 abrirModalProductos() {
   this.modalVisible = true;

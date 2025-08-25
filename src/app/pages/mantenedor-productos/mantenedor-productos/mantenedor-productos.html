@@ -40,12 +40,23 @@
                    formControlName="cantidad" placeholder="Ej: 10">
           </div>
            <!-- Fila 3 -->
-          <div class="col-md-6">
+          <!-- <div class="col-md-6">
             <label class="form-label fw-semibold">Tipo Venta</label>
             <input type="text" class="form-control "
                    formControlName="tipoventa" placeholder="unidad | gramos" [(ngModel)]="busqueda" (input)="filtrarProductos()">
-          </div>
-         
+          </div> -->
+         <div class="col-md-6">
+  <label class="form-label fw-semibold">Tipo Venta</label>
+  <select class="form-control"
+          formControlName="tipoventa"
+          [(ngModel)]="busqueda"
+          (change)="filtrarProductos()">
+    <option value="">Seleccione una opción</option>
+    <option value="unidad">Unidad</option>
+    <option value="gramos">Gramos</option>
+  </select>
+</div>
+
 <div class="d-flex justify-content-end gap-3">
    <button type="button" 
         class="btn btn-danger btn-lg px-5 rounded-3 shadow"
