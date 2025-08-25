@@ -73,6 +73,13 @@ export class Puntoventa {
       this.guardarBoleta();
     }
   });
+  this.productoForm.valueChanges.subscribe(val => {
+  if (val.precio && val.cantidad && val.tipo_venta) {
+    const subtotal = this.calcularTotal(val);
+    this.productoForm.get('total')?.setValue(subtotal, { emitEvent: false });
+  }
+});
+
   
    
   }
@@ -463,21 +470,46 @@ validarCantidad(): boolean {
 
 
 
+// editarProducto(index: number) {
+//   const prod = this.productosGuardados[index];
+//   // Por ejemplo, rellenar el formulario con los datos para editar:
+//   this.productoForm.patchValue({
+//     nombre: prod.nombre,
+//     codigo: prod.codigo,
+//     precio: prod.precio,
+//     cantidad: prod.cantidad,
+//     //total: this.calcularTotal(prod) 
+//     // otros campos...
+//   });
+    
+//   // Guarda el índice para luego actualizar el producto en vez de agregar uno nuevo
+//     this.editarIndex = index;
+    
+// }
 editarProducto(index: number) {
   const prod = this.productosGuardados[index];
-  // Por ejemplo, rellenar el formulario con los datos para editar:
+  let cantidad = prod.cantidad;
+
+  // 👇 Normalizamos solo para mostrar en el input
+  if (prod.tipo_venta === 'gramos' && cantidad > 10) {
+    // Guardado está en gramos → convertimos a gramos "puros" para el input
+    cantidad = cantidad; 
+  } else if (prod.tipo_venta === 'gramos' && cantidad <= 10) {
+    // Guardado está en kilos → convertimos a kilos
+    cantidad = cantidad / 1000;
+  }
+
   this.productoForm.patchValue({
     nombre: prod.nombre,
     codigo: prod.codigo,
     precio: prod.precio,
-    cantidad: prod.cantidad,
-    total: parseFloat(prod.total.toFixed(2))
-    // otros campos...
+    cantidad: cantidad,
+    tipo_venta: prod.tipo_venta
   });
-  // Guarda el índice para luego actualizar el producto en vez de agregar uno nuevo
-    this.editarIndex = index;
-    
+
+  this.editarIndex = index;
 }
+
 
 eliminarProducto(index: number) {
   this.productosGuardados.splice(index, 1);

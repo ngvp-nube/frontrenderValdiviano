@@ -33,10 +33,9 @@
               }
             ],
             "styles": [
-  "src/assets/bootstrap/css/bootstrap.min.css",
-  "src/assets/bootstrap/css/bootstrap-icons.css",
-  "src/styles.css"
-]
+ 
+            
+          ]
           },
           "configurations": {
             "production": {
