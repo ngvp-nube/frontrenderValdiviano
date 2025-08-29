@@ -83,7 +83,7 @@ table.table tbody tr td {
   padding: 14px 18px;
   text-align: center;
   vertical-align: middle;
-  font-weight: 500;
+  font-weight: 200;
   color: #495057;
 }
 
@@ -129,17 +129,21 @@ table.table tbody tr td.text-center {
   width: 72mm;                 /* Ancho típico boleta térmica */
   max-width: 100%;
   font-family: 'Courier New', monospace;
-  font-size: 14px;             /* ✅ Subido de 12px a 14px */
+  font-size: 30px;             /* ✅ Subido de 12px a 14px */
   line-height: 1.6;            /* Más espaciado para legibilidad */
 }
 
 .ticket h2 {
-  font-size: 18px;             /* ✅ Título más grande */
-  margin-bottom: 10px;
+  font-size: 50px;              /* ✅ Agrandado (ajusta más si quieres) */
+  margin-bottom: 8px;
+  text-align: center;
+  color: #000 !important;       /* ✅ Negro asegurado */
+  font-weight: bold !important; /* ✅ Texto bien grueso */
+  text-transform: uppercase; 
 }
 
 .ticket table {
-  font-size: 14px;             /* ✅ Texto tabla más grande */
+  font-size: 10px;             /* ✅ Texto tabla más grande */
 }
 
 .ticket .small {
@@ -392,3 +396,25 @@ table.table tbody tr td.text-center {
 
 
 
+.ticket-total {
+  font-size: 14px;      /* ✅ Más grande */
+  font-weight: bold;    /* Ya está con <strong>, pero se refuerza */
+  color: #000;          /* ✅ Negro */
+  margin-top: 8px;
+}
+.titulo-boleta {
+  font-size: 20px;
+  font-weight: bold;
+  color: #000 !important;
+  margin: 6px 0;
+  text-align: le;
+}
+.producto-nombre {
+  font-size: 11px;           /* ✅ Más pequeño */
+  font-weight: normal;       /* Opcional: menos grueso */
+  white-space: nowrap;       /* Evita que se rompa la línea */
+  overflow: hidden;
+  text-overflow: ellipsis;   /* Cortará con "..." si se pasa */
+  max-width: 100px;          /* Limita el ancho si es necesario */
+  display: inline-block;     /* Para que el max-width funcione */
+}

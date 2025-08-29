@@ -181,6 +181,21 @@ imprimirBoleta(id: number) {
             color: #000 !important;
             width: 100%;
           }
+            .producto-nombre {
+  font-size: 15px;           /* ✅ Más pequeño */
+  font-weight: normal;       /* Opcional: menos grueso */
+  overflow: hidden;
+           /* Limita el ancho si es necesario */
+
+}
+
+            .titulo-boleta {
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+  color: #000 !important;
+  margin-bottom: 10px;
+}
           body {
             font-family: 'Courier New', monospace;
             font-size: 14px;
@@ -201,9 +216,14 @@ imprimirBoleta(id: number) {
             margin-bottom: 8px;
             text-align: center;
           }
-          p {
-            margin: 4px 0;
-            text-align: center;
+          p.text-end {
+            text-align: right;
+            font-size: 23px;          /* ✅ Agrandado */
+            font-weight: bold;        /* ✅ Ya está, pero se asegura */
+            color: #000 !important;   /* ✅ Negro asegurado */
+            margin-top: 10px;
+            border-top: 1px solid #000;  /* ✅ Línea arriba como en supermercados */
+            padding-top: 6px;
           }
           table {
             width: 100%;
@@ -222,7 +242,7 @@ imprimirBoleta(id: number) {
           }
           hr {
             border: none;
-            border-top: 1px dashed #000;
+            border-top: 2px dashed #000;
             margin: 8px 0;
           }
           p.text-end {
