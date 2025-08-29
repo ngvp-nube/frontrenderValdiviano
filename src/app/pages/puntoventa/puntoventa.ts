@@ -23,6 +23,7 @@ export class Puntoventa {
    @ViewChild('cantidadGramos', { static: false }) cantidadGramos!: ElementRef<HTMLInputElement>;
    @ViewChild('cantidadUnidad', { static: false }) cantidadUnidad!: ElementRef<HTMLInputElement>;
    @ViewChild('totalInput') totalInput!: ElementRef<HTMLInputElement>;
+   @ViewChild('precioInput') precioInput!: ElementRef<HTMLInputElement>;
 
   numeroBoleta: string = '';
   boletaCargadaDesdeBusqueda: boolean = false;
@@ -282,6 +283,59 @@ imprimirBoleta(id: number) {
 // }
 
 
+// buscarProductoPorCodigo(): void {
+//   console.log('Ejecutando buscarProductoPorCodigo');
+//   const codigo = this.productoForm.get('codigo')?.value;
+//   console.log('Código ingresado:', codigo);
+
+//   if (codigo) {
+//     this.api.searchProducto(codigo).subscribe({
+//       next: producto => {
+//         console.log('Producto encontrado', producto);
+//         this.productoForm.patchValue({
+//           nombre: producto.nombre,
+//           precio: producto.precio ,
+//           cantidad: '',
+//           tipo_venta: producto.tipo_venta,
+//           total: producto.precio
+//         });
+//         this.tipoventa = producto.tipo_venta
+//       if (this.tipoventa === 'Gramos' || this.tipoventa === 'gramos') {
+//   this.inputGramos = true;
+//   this.inputCantidad = false;
+
+//   // Esperar al DOM para que el input esté presente
+//   setTimeout(() => {
+//     this.cantidadGramos?.nativeElement.focus();
+//   });
+// } else if (this.tipoventa === 'Unidad' || this.tipoventa === 'unidad') {
+//   this.inputGramos = false;
+//   this.inputCantidad = true;
+
+//   // Esperar al DOM para que el input esté presente
+//   setTimeout(() => {
+//     this.cantidadUnidad?.nativeElement.focus();
+//   });
+// }
+
+//       },
+//       error: err => {
+//         console.error('Producto no encontrado', err);
+//         this.productoForm.patchValue({
+//           nombre: '',
+//           precio: '',
+//           stock: '',
+//           descripcion: '',
+
+//           total: ''
+//         });
+//       }
+//     });
+//   }
+// this.enfocarCantidad();
+
+ 
+// }
 buscarProductoPorCodigo(): void {
   console.log('Ejecutando buscarProductoPorCodigo');
   const codigo = this.productoForm.get('codigo')?.value;
@@ -293,30 +347,40 @@ buscarProductoPorCodigo(): void {
         console.log('Producto encontrado', producto);
         this.productoForm.patchValue({
           nombre: producto.nombre,
-          precio: producto.precio ,
+          precio: producto.precio,
           cantidad: '',
           tipo_venta: producto.tipo_venta,
           total: producto.precio
         });
-        this.tipoventa = producto.tipo_venta
-      if (this.tipoventa === 'Gramos' || this.tipoventa === 'gramos') {
-  this.inputGramos = true;
-  this.inputCantidad = false;
 
-  // Esperar al DOM para que el input esté presente
-  setTimeout(() => {
-    this.cantidadGramos?.nativeElement.focus();
-  });
-} else if (this.tipoventa === 'Unidad' || this.tipoventa === 'unidad') {
-  this.inputGramos = false;
-  this.inputCantidad = true;
+        this.tipoventa = producto.tipo_venta;
 
-  // Esperar al DOM para que el input esté presente
-  setTimeout(() => {
-    this.cantidadUnidad?.nativeElement.focus();
-  });
-}
+        // 🚨 Caso especial: código 99 (producto "Varios")
+        if (codigo === '99') {
+          setTimeout(() => {
+            this.precioInput?.nativeElement.focus();
+            this.inputCantidad = true;
+            this.inputGramos = false;
+          });
+          return; // 👈 evita que siga la lógica normal
+        }
 
+        // ✅ Flujo normal
+        if (this.tipoventa === 'Gramos' || this.tipoventa === 'gramos') {
+          this.inputGramos = true;
+          this.inputCantidad = false;
+
+          setTimeout(() => {
+            this.cantidadGramos?.nativeElement.focus();
+          });
+        } else if (this.tipoventa === 'Unidad' || this.tipoventa === 'unidad') {
+          this.inputGramos = false;
+          this.inputCantidad = true;
+
+          setTimeout(() => {
+            this.cantidadUnidad?.nativeElement.focus();
+          });
+        }
       },
       error: err => {
         console.error('Producto no encontrado', err);
@@ -325,15 +389,13 @@ buscarProductoPorCodigo(): void {
           precio: '',
           stock: '',
           descripcion: '',
-
           total: ''
         });
       }
     });
   }
-this.enfocarCantidad();
 
- 
+  this.enfocarCantidad();
 }
 
 

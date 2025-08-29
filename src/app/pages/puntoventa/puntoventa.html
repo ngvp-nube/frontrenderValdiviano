@@ -23,12 +23,12 @@
 
             <div class="col-md-2">
               <label class="form-label fw-semibold">Precio ($)</label>
-              <input type="number" class="form-control form-control-sm" [(ngModel)]="productoSeleccionado.precio"
-                formControlName="precio"  placeholder="Ej: 1500">
+              <input type="number" #precioInput  class="form-control form-control-sm" [(ngModel)]="productoSeleccionado.precio"
+                formControlName="precio"  placeholder="Ej: 1500" (keydown.enter)="enfocarCantidad()">
             </div>
 
             <div class="col-md-2">
-              <label class="form-label fw-semibold">Cantidad (Gr)</label>
+              <label class="form-label fw-semibold">Cantidad</label>
               <input type="text" class="form-control form-control-sm" *ngIf="inputGramos"
   formControlName="cantidad" #cantidadGramos placeholder="gramos"
   (keydown.enter)="calcularSubtotalYEnfocarTotal()">
@@ -117,8 +117,9 @@
       </td>
     </tr>
     <tr *ngIf="productosGuardados.length === 0">
-      <td colspan="6" class="text-center">No hay productos agregados</td>
-    </tr>
+  <td colspan="5" class="text-center">No hay productos agregados</td>
+</tr>
+
   </tbody>
 </table>
 

@@ -1,76 +1,17 @@
-<div class="container mt-4">
-
-
-
-  <h2 class="text-primary mb-4">Boletas Registradas</h2>
-  <div class="d-flex align-items-center justify-content-between mt-4 flex-wrap gap-3">
-  <!-- Label e input en línea -->
-<!-- <div class="d-flex align-items-center gap-2">
-    <label for="fecha" class="form-label fw-semibold mb-0">
-      <i class="bi bi-calendar-event me-1 text-primary"></i> Fecha:
-    </label>
-    <input
-      type="date"
-      class="form-control shadow-sm border-primary rounded-pill px-3"
-      id="fecha"
-      name="fecha"
-      [(ngModel)]="fechaSeleccionada"
-      (change)="filtrarBoletasPorFecha()"
-      style="max-width: 220px;"
-      
-    />
-  </div> -->
-  <input
-  type="text"
-  class="form-control mb-2"
-  [(ngModel)]="busquedaNumero"
-  (input)="filtrarBoletasPorNumero()"
-  placeholder="Buscar N° de Boleta">
-  <!-- Botón alineado al mismo nivel -->
-  <!-- <div>
-    <button
-      type="submit"
-      class="btn btn-primary btn-lg px-5 rounded-3 shadow"
-      (click)="Contabilidad()"
-    >
-      <i class="bi bi-save me-2"></i>Generar Contabilidad
-    </button>
-  </div> -->
-</div>
-<hr>
-  
-<div class="row g-4">
-  <div class="col-md-6 col-lg-4" *ngFor="let boleta of boletas">
-    <div class="card shadow-sm border-0 rounded-4 h-100 position-relative">
-
-      <!-- Botón X de eliminación -->
-      <button
-        class="btn btn-sm btn-danger position-absolute top-0 end-0 m-2 rounded-circle"
-        (click)="eliminarBoleta(boleta.id)"
-        title="Eliminar boleta"
-      >
-        &times;
-      </button>
-
-      <div class="card-body">
-        <h5 class="card-title text-primary">
-          <i class="bi bi-receipt"></i> Boleta N° {{ boleta.id }}
-        </h5>
-        <p class="mb-2"><strong>Fecha:</strong> {{ boleta.fecha }}</p>
-        <p><strong>Total:</strong> ${{ boleta.total | number:'1.0-0' }}</p>
-
-        <hr>
-
-        <ul class="list-group list-group-flush small">
-          <li class="list-group-item px-0 py-1 d-flex justify-content-between"
-              *ngFor="let item of boleta.detalles">
-            <span>{{ item.nombre }} </span>
-            <span>${{ item.total | number:'1.0-0' }}</span>
-          </li>
-        </ul>
-      </div>
+<div class="boletas-container">
+  <div class="card" *ngFor="let boleta of boletas">
+    <button class="btn btn-danger" (click)="eliminarBoleta(boleta.id)">&times;</button>
+    <div class="card-body">
+      <h5 class="card-title text-primary"><i class="bi bi-receipt"></i> Boleta N° {{ boleta.id }}</h5>
+      <p class="mb-2"><strong>Fecha:</strong> {{ boleta.fecha }}</p>
+      <p><strong>Total:</strong> ${{ boleta.total | number:'1.0-0' }}</p>
+      <hr>
+      <ul class="list-group list-group-flush small">
+        <li class="list-group-item px-0 py-1 d-flex justify-content-between" *ngFor="let item of boleta.detalles">
+          <span>{{ item.nombre }}</span>
+          <span>${{ item.total | number:'1.0-0' }}</span>
+        </li>
+      </ul>
     </div>
   </div>
-</div>
-
 </div>

@@ -1,0 +1,98 @@
+/* Contenedor principal del formulario */
+form.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 40px;
+  background: linear-gradient(145deg, #ffffff, #f1f3f6);
+  border-radius: 25px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+}
+
+/* Título principal */
+form h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #4a6cf7;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 3px solid #4a6cf7;
+  padding-bottom: 10px;
+}
+
+/* Tarjeta interna */
+.p-4.rounded-4.shadow-sm {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+/* Inputs y selects */
+.form-control {
+  border-radius: 12px;
+  padding: 12px 15px;
+  font-size: 1rem;
+  border: 1px solid #d1d9e6;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #4a6cf7;
+  box-shadow: 0 0 10px rgba(74, 108, 247, 0.2);
+  outline: none;
+}
+
+/* Select personalizado */
+select.form-control {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: #f8f9fa url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16'><polygon points='0,0 16,0 8,8' fill='%234a6cf7'/></svg>") no-repeat right 12px center;
+  background-size: 12px;
+}
+
+/* Botones principales */
+button.btn {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border-radius: 12px;
+  padding: 12px 25px;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+button.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+}
+
+/* Colores botones */
+.btn-danger { background-color: #ff6b6b; border-color: #ff6b6b; color: #fff; }
+.btn-danger:hover { background-color: #fa5252; border-color: #fa5252; }
+
+.btn-primary { background-color: #4a6cf7; border-color: #4a6cf7; color: #fff; }
+.btn-primary:hover { background-color: #3b54d1; border-color: #3b54d1; }
+
+.btn-success { background-color: #37b24d; border-color: #37b24d; color: #fff; }
+.btn-success:hover { background-color: #2f9e44; border-color: #2f9e44; }
+
+/* Separación entre botones */
+.d-flex.gap-3 {
+  margin-top: 25px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+/* Botón Buscar código */
+.col-md-6 button {
+  margin-top: 10px;
+}
+
+/* Transición suave en todo el formulario */
+form.container, .form-control, button.btn {
+  transition: all 0.3s ease;
+}

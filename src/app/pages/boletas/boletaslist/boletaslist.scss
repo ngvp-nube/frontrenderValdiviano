@@ -1,62 +1,101 @@
-.card {
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 3px 6px rgb(0 0 0 / 0.16);
-  margin-bottom: 1.5rem;
-  overflow: hidden;
+/* Contenedor principal de boletas dentro del main-content */
+.boletas-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  width: 100%;
+  padding: 0; /* Para que no rompa el padding del main-content */
+  margin: 0;
 }
 
-.card-header {
-  padding: 1rem 1.25rem;
-  font-weight: 600;
-  font-size: 1.25rem;
+/* Tarjetas de boletas cuadradas y modernas */
+.card {
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+}
+
+/* Botón eliminar flotante */
+.card .btn-danger {
+  width: 28px;
+  height: 28px;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  transition: all 0.3s ease;
+}
+
+.card .btn-danger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+}
+
+/* Card body */
+.card-body {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.card-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Datos generales */
+.card-body p {
+  font-size: 0.95rem;
+  margin-bottom: 6px;
+  color: #495057;
+}
+
+/* Lista de detalles */
+ul.list-group li {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  color: white;
-  background-color: #007bff;
-}
-
-.card-body {
-  padding: 1rem 1.25rem;
-}
-
-.text-success {
-  color: #28a745;
-  font-weight: 600;
-}
-
-.table-responsive {
-  overflow-x: auto;
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-}
-
-.table th,
-.table td {
-  border: 1px solid #dee2e6;
-  padding: 0.5rem 0.75rem;
-}
-
-.table-striped tbody tr:nth-of-type(odd) {
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #e0e0e0;
   background-color: #f8f9fa;
 }
 
-.table th {
-  background-color: #cfe2ff;
-  font-weight: 600;
-  text-align: left;
+ul.list-group li:last-child {
+  border-bottom: none;
 }
 
-.text-end {
-  text-align: right;
+/* Responsive: ajusta número de columnas */
+@media (max-width: 992px) {
+  .boletas-container {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
 }
 
-input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(40%) sepia(80%) saturate(300%) hue-rotate(180deg);
-  cursor: pointer;
+@media (max-width: 576px) {
+  .boletas-container {
+    grid-template-columns: 1fr;
+  }
 }
