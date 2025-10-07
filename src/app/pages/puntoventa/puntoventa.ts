@@ -91,7 +91,6 @@ export class Puntoventa {
   }, 10); // aseguramos que el DOM esté renderizado
 }
 
-
 guardarBoleta() {
   if (this.productosGuardados.length === 0) {
     Swal.fire({
@@ -103,14 +102,6 @@ guardarBoleta() {
     return;
   }
 
-  if (this.boletaCargadaDesdeBusqueda) {
-    // ✅ Reimpresión de boleta ya existente, no se guarda, solo imprime
-    this.imprimirBoleta(this.idboleta);
-    this.boletaCargadaDesdeBusqueda = false; // Limpiar estado
-    return;
-  }
-
-  // ✅ Crear boleta normalmente
   const detalles = this.productosGuardados.map(prod => {
     const tipo = prod.tipo_venta.toLowerCase();
     const cantidad = (tipo === 'gramos' && prod.cantidad <= 10)
@@ -124,7 +115,7 @@ guardarBoleta() {
     return {
       nombre: prod.nombre,
       precio: prod.precio,
-      cantidad: prod.cantidad,
+      cantidad: cantidad,  // 👈 asegúrate de enviar solo el número
       tipo_venta: tipo,
       total: subtotal
     };
@@ -134,18 +125,23 @@ guardarBoleta() {
 
   const boleta = {
     total: total,
-    detalles: detalles
+    productos: detalles  // ✅ nombre esperado por la API
   };
 
-  this.api.crearBoleta(boleta).subscribe(res => {
-    this.idboleta = res['id'];
-    this.cdr.detectChanges();
+  this.api.crearBoleta(boleta).subscribe({
+    next: (res) => {
+      this.idboleta = res.boleta_id;
+      console.log("Boleta creada con ID:", this.idboleta);
 
-    setTimeout(() => {
-      this.imprimirBoleta(this.idboleta);
-    }, 200);
+      this.imprimirapi();  // ✅ imprimir
+    },
+    error: (err) => {
+      console.error("Error al crear boleta:", err);
+    }
   });
 }
+
+
 
 
 imprimirBoleta(id: number) {
@@ -278,84 +274,233 @@ imprimirBoleta(id: number) {
   
 }
 
+imprimirapi() {
+  if (this.productosGuardados.length === 0) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Boleta vacía',
+      text: 'Debe agregar al menos un producto antes de guardar la boleta.',
+      confirmButtonColor: '#3085d6'
+    });
+    return;
+  }
+
+  const detalles = this.productosGuardados.map(prod => {
+    const tipo = prod.tipo_venta.toLowerCase();
+    const cantidad = (tipo === 'gramos' && prod.cantidad <= 10)
+      ? prod.cantidad * 1000
+      : prod.cantidad;
+
+    const subtotal = tipo === 'gramos'
+      ? Math.round(prod.precio * cantidad) / 1000
+      : Math.round(prod.precio * cantidad);
+
+    return {
+      nombre: prod.nombre,
+      precio: prod.precio,
+      cantidad: cantidad,
+      tipo_venta: tipo,
+      total: subtotal
+    };
+  });
+
+  const total = detalles.reduce((acc, item) => acc + item.total, 0);
+
+  const payload = {
+    venta: {
+      numero: this.idboleta || 'N/A',
+      fecha: new Date().toISOString(),
+      direccion: "Av. Lagunillas 3166"
+    },
+    productos: this.productosGuardados.map(prod => ({
+      nombre: prod.nombre,
+      precio: prod.precio,
+      cantidad: prod.tipo_venta === 'gramos' ? prod.cantidad + ' g' : prod.cantidad,
+      total: Math.round(prod.total)
+    })),
+    total: Math.round(total)
+  };
+
+  // ✅ Mostrar confirmación con enfoque automático en el botón
+  Swal.fire({
+    title: this.boletaCargadaDesdeBusqueda ? '¿Deseas reimprimir esta boleta?' : '¿Deseas imprimir la boleta?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, imprimir',
+    cancelButtonText: 'No',
+    didOpen: () => {
+      setTimeout(() => {
+        const el = document.activeElement as HTMLElement;
+        if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA')) {
+          el.blur();
+        }
+
+        const confirmBtn = Swal.getConfirmButton();
+        if (confirmBtn) {
+          confirmBtn.focus();
+        }
+      }, 50); // pequeño delay para asegurar que el DOM esté listo
+    }
+  }).then((result) => {
+    if (!result.isConfirmed) return;
+
+    // 🔁 Si es una boleta ya buscada → solo imprimir
+    if (this.boletaCargadaDesdeBusqueda && this.idboleta) {
+      payload.venta.numero = this.idboleta;
+
+      this.api.crearImpresion(payload).subscribe({
+        next: (res) => {
+          console.log("✅ Reimpresión enviada correctamente:", res);
+          Swal.fire({
+            title: 'Reimpresión enviada',
+            icon: 'success',
+            timer: 2000,
+            showConfirmButton: false,
+            willClose: () => {
+              location.reload();
+            }
+          });
+        },
+        error: (err) => {
+          console.error("❌ Error al reimprimir:", err);
+          Swal.fire({
+            title: 'Error al reimprimir',
+            icon: 'error',
+            timer: 2000,
+            showConfirmButton: false
+          });
+        }
+      });
+
+    } else {
+      // 🆕 Nueva boleta → guardar + imprimir
+      const boleta = {
+        total: total,
+        productos: detalles
+      };
+
+      this.api.crearBoleta(boleta).subscribe({
+        next: (res) => {
+          this.idboleta = res.boleta_id;
+          payload.venta.numero = this.idboleta;
+
+          this.api.crearImpresion(payload).subscribe({
+            next: (res) => {
+              console.log("✅ Impresión enviada correctamente:", res);
+              Swal.fire({
+                title: 'Impresión enviada',
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false,
+                willClose: () => {
+                  location.reload();
+                }
+              });
+            },
+            error: (err) => {
+              console.error("❌ Error al imprimir:", err);
+              Swal.fire({
+                title: 'Error al imprimir',
+                icon: 'error',
+                timer: 2000,
+                showConfirmButton: false
+              });
+            }
+          });
+        },
+        error: (err) => {
+          console.error("❌ Error al crear boleta:", err);
+        }
+      });
+    }
+  });
+}
 
 
+// imprimirapi() {
+ 
 
-//  imprimirBoleta() {
-//   try {
-//     const impresoras =  this.QzService.obtenerImpresoras();
-//     console.log('Impresoras disponibles:', impresoras);
 
-//     const texto = `
-//       FERRETERÍA ANGEL
-//       -----------------------
-//       2x Martillo         $500
-//       1x Clavos           $200
-//       -----------------------
-//       TOTAL:              $700
-//     `;
-
-//        this.QzService.imprimirTexto('\\\\Cajacentral\\SLK-TL210', texto);
-//     console.log('✅ Impresión enviada');
-//   } catch (error) {
-//     console.error('❌ Error al imprimir:', error);
+//   if (document.activeElement instanceof HTMLElement) {
+//     document.activeElement.blur();
 //   }
+  
+//   const totalRedondeado = Math.round(this.getTotalGeneral());
+//   const payload = {
+//     venta: {
+//       numero: this.idboleta,
+//       fecha: new Date().toISOString(),
+//       direccion: "Av. Lagunillas 3166" // Puedes hacerlo dinámico si lo deseas
+//     },
+//     productos: this.productosGuardados.map(prod => ({
+//       nombre: prod.nombre,
+//       precio: prod.precio,
+//       cantidad: prod.tipo_venta === 'gramos' ? prod.cantidad + ' g' : prod.cantidad,
+//       total: prod.total
+//     })),
+//     total: totalRedondeado
+//   };
+//   console.log("paylod",payload);
+  
+
+// Swal.fire({
+//   title: '¿Deseas imprimir la boleta?',
+//   icon: 'question',
+//   showCancelButton: true,
+//   confirmButtonText: 'Sí, imprimir',
+//   cancelButtonText: 'No',
+//   didOpen: () => {
+//   setTimeout(() => {
+//     // ✅ Forzar blur de cualquier input
+//     const el = document.activeElement as HTMLElement;
+//     if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA')) {
+//       el.blur();
+//     }
+
+//     // ✅ Ahora enfoca el botón de confirmación
+//     const confirmBtn = Swal.getConfirmButton();
+//     if (confirmBtn) {
+//       confirmBtn.focus();
+//     }
+//   }, 50); // pequeño delay para que DOM esté listo
 // }
-
-
-// buscarProductoPorCodigo(): void {
-//   console.log('Ejecutando buscarProductoPorCodigo');
-//   const codigo = this.productoForm.get('codigo')?.value;
-//   console.log('Código ingresado:', codigo);
-
-//   if (codigo) {
-//     this.api.searchProducto(codigo).subscribe({
-//       next: producto => {
-//         console.log('Producto encontrado', producto);
-//         this.productoForm.patchValue({
-//           nombre: producto.nombre,
-//           precio: producto.precio ,
-//           cantidad: '',
-//           tipo_venta: producto.tipo_venta,
-//           total: producto.precio
+// }).then((result) => {
+//   if (result.isConfirmed) {
+//     this.api.crearImpresion(payload).subscribe({
+//       next: (res) => {
+//         this.guardarBoleta();
+//         console.log("idboleta",this.idboleta);
+//         console.log("✅ Impresión enviada correctamente:", res);
+//         Swal.fire({
+//           title: 'Impresión enviada',
+//           icon: 'success',
+//           timer: 2000,
+//           showConfirmButton: false,
+//           willClose: () => {
+//             // location.reload();
+//           }
 //         });
-//         this.tipoventa = producto.tipo_venta
-//       if (this.tipoventa === 'Gramos' || this.tipoventa === 'gramos') {
-//   this.inputGramos = true;
-//   this.inputCantidad = false;
-
-//   // Esperar al DOM para que el input esté presente
-//   setTimeout(() => {
-//     this.cantidadGramos?.nativeElement.focus();
-//   });
-// } else if (this.tipoventa === 'Unidad' || this.tipoventa === 'unidad') {
-//   this.inputGramos = false;
-//   this.inputCantidad = true;
-
-//   // Esperar al DOM para que el input esté presente
-//   setTimeout(() => {
-//     this.cantidadUnidad?.nativeElement.focus();
-//   });
-// }
-
 //       },
-//       error: err => {
-//         console.error('Producto no encontrado', err);
-//         this.productoForm.patchValue({
-//           nombre: '',
-//           precio: '',
-//           stock: '',
-//           descripcion: '',
-
-//           total: ''
+//       error: (err) => {
+//         console.error("❌ Error al enviar impresión:", err);
+//         Swal.fire({
+//           title: 'Error al imprimir',
+//           icon: 'error',
+//           timer: 2000,
+//           showConfirmButton: false
 //         });
 //       }
 //     });
 //   }
-// this.enfocarCantidad();
+// });
 
- 
+
 // }
+
+
+
+
+
 buscarProductoPorCodigo(): void {
   console.log('Ejecutando buscarProductoPorCodigo');
   const codigo = this.productoForm.get('codigo')?.value;
@@ -438,70 +583,6 @@ let cantidad = prod.cantidad;
 
 }
 
-// agregarProducto(): void {
-//   if (!this.validarCantidad()) {
-//     return;
-//   }
-
-//   const nuevoProducto = this.productoForm.value;
-
-//   // Validamos que el formulario no esté vacío
-//   if (!nuevoProducto || !nuevoProducto.nombre || !nuevoProducto.precio || !nuevoProducto.cantidad) {
-//     Swal.fire({
-//       icon: 'warning',
-//       title: 'Producto incompleto',
-//       text: 'Por favor, complete los datos del producto antes de agregarlo.',
-//       confirmButtonColor: '#3085d6'
-//     });
-//     return;
-//   }
-
-//   console.log("✅ Producto a agregar:", nuevoProducto);
-
-//   if (this.editarIndex !== null) {
-//     this.productosGuardados.splice(this.editarIndex, 1);
-//     this.productosGuardados.push(nuevoProducto);
-//     this.editarIndex = null;
-//   } else {
-//     this.productosGuardados.push(nuevoProducto);
-//   }
-
-//   this.productoForm.reset();
-// }
-
-// validarCantidad(): boolean {
-//   const cantidad = this.productoForm.get('cantidad')?.value;
-
-//   if (this.tipoventa === 'gramos') {
-//     // Validar que sea un número positivo
-//     if (!cantidad || isNaN(cantidad) || cantidad <= 0) {
-//       alert("Ingrese una cantidad válida en gramos.");
-//       return false;
-//     }
-
-//     // Si es tipo gramos, permitir solo múltiplos de 50 o 100
-//     if (cantidad % 50 !== 0) {
-//       alert("La cantidad en gramos debe ser múltiplo de 50.");
-//       return false;
-//     }
-
-//     // (Opcional) Puedes convertir si alguien pone 1, 2, 3 => a gramos reales
-//     if (cantidad < 10) {
-//       alert("¿Quiso decir gramos o kilos? Por favor, ingrese en gramos (Ej: 250, 500).");
-//       return false;
-//     }
-//   }
-
-//   if (this.inputCantidad) {
-//     // Validar enteros positivos para unidades
-//     if (!Number.isInteger(cantidad) || cantidad <= 0) {
-//       alert("Ingrese una cantidad válida en unidades.");
-//       return false;
-//     }
-//   }
-
-//   return true;
-// }
 validarCantidad(): boolean {
   let cantidad = this.productoForm.get('cantidad')?.value;
 
@@ -623,7 +704,11 @@ getTotalGeneral(): number {
   manejarTecla(event: KeyboardEvent) {
     if (event.key === 'F2') {
       event.preventDefault(); // evita comportamiento por defecto del navegador (opcional)
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
       this.btnImprimir.nativeElement.click(); // simula clic al botón
+      
     }else if (event.key === 'F1'){
        event.preventDefault(); // evita abrir ayuda del navegador
     this.abrirModalProductos();

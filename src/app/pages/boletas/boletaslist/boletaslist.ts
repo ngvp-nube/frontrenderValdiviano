@@ -25,6 +25,7 @@ export class Boletaslist {
 
     ngOnInit(): void {
       this.ListarApi();
+      console.log(this.boletas);
 
   }
 

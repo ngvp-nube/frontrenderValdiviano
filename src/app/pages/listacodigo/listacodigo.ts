@@ -36,6 +36,7 @@ generarContabilidad() {
 
   this.api.obtenerProductosPorFecha(this.fechaSeleccionada).subscribe({
     next: (res) => {
+      console.log("respuesta",res)
       this.productosContables = res.productos;
       this.totalGeneral = res.total_general;
       setTimeout(() => this.imprimirContabilidad(), 100);

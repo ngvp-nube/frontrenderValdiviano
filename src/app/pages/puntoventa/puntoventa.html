@@ -80,9 +80,11 @@
   <!-- Botón de imprimir -->
    <div class="d-flex justify-content-end gap-2 mt-3 no-print">
   <button type="button" class="btn btn-primary btn-sm px-4 rounded-3 shadow"
-    (click)="guardarBoleta()" #btnImprimir>
+    (click)="imprimirapi()" #btnImprimir>
     <i class="bi bi-printer me-2"></i> Imprimir
   </button>
+
+   
 
  
   <input   #inputBoleta [(ngModel)]="numeroBoleta" class="form-control form-control-sm w-auto" placeholder="Buscar boleta..." (keydown.enter)="buscarBoleta(inputBoleta.value)" />

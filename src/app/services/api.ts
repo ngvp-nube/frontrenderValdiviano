@@ -20,11 +20,14 @@ export class Api {
   private apiUrl = 'http://192.168.1.100:8000/api/producto/';
     private loginUrl = 'http://192.168.1.100:8000/api/login/';
     private searchnUrl = 'http://192.168.1.100:8000/api/producto';
-    private urlboleta = 'http://192.168.1.100:8000/api/boleta/';
+    private urlboleta = 'http://192.168.1.100:8000/api/crear-boleta/';
+    private urlboletass = 'http://192.168.1.100:8000/api/boleta/';
     private urlConabilidad = 'http://192.168.1.100:8000/contabilidad/total/?';
     private urldeleteBoleta = 'http://192.168.1.100:8000/api/boletas/eliminar/';
     private urlsearchBoleta = 'http://192.168.1.100:8000/boletas/';
     private urlconta = 'http://192.168.1.100:8000';
+    private apiImprimir = 'http://192.168.1.100:8000/api/imprimir-boleta/';
+    private urluultimoid = 'http://192.168.1.100:8000/boleta/ultimo-id/';
 //   private apiUrl = 'http://localhost:8000/api/producto/';
 // private loginUrl = 'http://localhost:8000/api/login/';
 // private searchnUrl = 'http://localhost:8000/api/producto';
@@ -48,6 +51,14 @@ export class Api {
     'Content-Type': 'application/json' });
 
     return this.http.post<Producto>(this.apiUrl, producto, {headers});
+  }
+
+  crearImpresion(boleta: any) {
+    const token = localStorage.getItem('token')
+    const headers = new HttpHeaders({
+    'Authorization': `Token ${token}`,
+    'Content-Type': 'application/json' });
+    return this.http.post(this.apiImprimir, boleta,{headers});
   }
 
     // buscar un producto
@@ -112,7 +123,7 @@ obtenerProductosPorFecha(fecha: string) {
       'Authorization': `Token ${localStorage.getItem('token')}`,
       'Content-Type': 'application/json'
     });
-  return this.http.get(this.urlboleta, {headers});
+  return this.http.get(this.urlboletass, {headers});
 }
 
 GetContabilidadTotal(fecha: string): Observable<any> {
@@ -134,6 +145,15 @@ GetContabilidadTotal(fecha: string): Observable<any> {
     'Content-Type': 'application/json' });
 
     return this.http.get<any>(this.apiUrl, {headers});
+  }
+
+  Obtenerultimoid(): Observable<any> {
+    const token = localStorage.getItem('token')
+    const headers = new HttpHeaders({
+    'Authorization': `Token ${token}`,
+    'Content-Type': 'application/json' });
+
+    return this.http.get<any>(this.urluultimoid, {headers});
   }
 
 
@@ -168,4 +188,6 @@ searchboletaforcode(codigo: string) {
   });
   return this.http.get(this.urlsearchBoleta+`${codigo}/`,{headers});
 }
+
+
 }
