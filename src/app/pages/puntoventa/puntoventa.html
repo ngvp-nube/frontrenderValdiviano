@@ -1,7 +1,7 @@
 <form [formGroup]="productoForm">
   <div>
     <div class="row justify-content-center">
-      <div class="col-lg-10">
+      
         <div class="p-3 rounded-4 shadow-sm border bg-white">
           <h5 class="mb-3 text-primary fw-bold">
             <i class="bi bi-cash-stack me-2"></i> Registro de Venta
@@ -55,7 +55,7 @@
             </div>
           </div> -->
         </div>
-      </div>
+      
     </div>
 
     <!-- Botón agregar producto -->
@@ -67,16 +67,13 @@
   </div>
 
   
-
-  <!-- Total general -->
-   <h4>Total ${{ getTotalGeneral() | number:'1.0-0' }}</h4>
-  <hr>
-  
 </form>
 
 <!-- Tabla para mostrar lista de productos agregados -->
 <div class="mt-5">
-  <h4>Carrito de compras</h4>
+    <!-- Total general -->
+   <h4>Total ${{ getTotalGeneral() | number:'1.0-0' }}</h4>
+  
   <!-- Botón de imprimir -->
    <div class="d-flex justify-content-end gap-2 mt-3 no-print">
   <button type="button" class="btn btn-primary btn-sm px-4 rounded-3 shadow"

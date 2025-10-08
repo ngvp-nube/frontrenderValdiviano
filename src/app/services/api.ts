@@ -17,6 +17,7 @@ export interface Producto {
   providedIn: 'root'
 })
 export class Api {
+  //produccion
   private apiUrl = 'http://192.168.1.100:8000/api/producto/';
     private loginUrl = 'http://192.168.1.100:8000/api/login/';
     private searchnUrl = 'http://192.168.1.100:8000/api/producto';
@@ -28,14 +29,18 @@ export class Api {
     private urlconta = 'http://192.168.1.100:8000';
     private apiImprimir = 'http://192.168.1.100:8000/api/imprimir-boleta/';
     private urluultimoid = 'http://192.168.1.100:8000/boleta/ultimo-id/';
-//   private apiUrl = 'http://localhost:8000/api/producto/';
-// private loginUrl = 'http://localhost:8000/api/login/';
-// private searchnUrl = 'http://localhost:8000/api/producto';
-// private urlboleta = 'http://localhost:8000/api/boleta/';
-// private urlConabilidad = 'http://localhost:8000/contabilidad/total/?';
-// private urldeleteBoleta = 'http://localhost:8000/api/boletas/eliminar/';
-// private urlsearchBoleta = 'http://localhost:8000/boletas/';
-// private urlconta = 'http://localhost:8000';
+//prueba local
+// private apiUrl = 'http://localhost:8000/api/producto/';
+//     private loginUrl = 'http://localhost:8000/api/login/';
+//     private searchnUrl = 'http://localhost:8000/api/producto';
+//     private urlboleta = 'http://localhost:8000/api/crear-boleta/';
+//     private urlboletass = 'http://localhost:8000/api/boleta/';
+//     private urlConabilidad = 'http://localhost:8000/contabilidad/total/?';
+//     private urldeleteBoleta = 'http://localhost:8000/api/boletas/eliminar/';
+//     private urlsearchBoleta = 'http://localhost:8000/boletas/';
+//     private urlconta = 'http://localhost:8000';
+//     private apiImprimir = 'http://localhost:8000/api/imprimir-boleta/';
+//     private urluultimoid = 'http://localhost:8000/boleta/ultimo-id/';
 
 
   private loggedIn = new BehaviorSubject<boolean>(false);
@@ -124,6 +129,14 @@ obtenerProductosPorFecha(fecha: string) {
       'Content-Type': 'application/json'
     });
   return this.http.get(this.urlboletass, {headers});
+}
+
+ getBoletas(fecha?: string): Observable<any> {
+    const headers= new HttpHeaders({
+      'Authorization': `Token ${localStorage.getItem('token')}`,
+      'Content-Type': 'application/json'
+    });
+  return this.http.get(this.urlboletass+ `?fecha=${fecha}`, {headers});
 }
 
 GetContabilidadTotal(fecha: string): Observable<any> {

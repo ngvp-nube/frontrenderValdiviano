@@ -14,6 +14,7 @@ import Swal from 'sweetalert2';
 export class Boletaslist {
     boletas: Boleta[] = [];
     total = []
+    
     boletasOriginales: any[] = [];
     busquedaNumero = ""
     fechaSeleccionada: string = '';
@@ -28,6 +29,19 @@ export class Boletaslist {
       console.log(this.boletas);
 
   }
+  
+
+obtenerBoletasPorFecha() {
+  console.log('📅 Fecha seleccionada:', this.fechaSeleccionada);
+  this.api.getBoletas(this.fechaSeleccionada).subscribe({
+    next: (res) => {
+      this.boletasOriginales = res;
+        this.boletas = [...res];
+    },
+    error: (err) => console.error(err)
+  });
+}
+
 
   ListarApi(){
     this.api.ListBoleta().subscribe({

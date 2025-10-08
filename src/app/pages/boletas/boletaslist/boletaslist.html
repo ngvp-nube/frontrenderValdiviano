@@ -1,4 +1,17 @@
+<div class="d-flex align-items-center gap-2 mb-3">
+  <label for="fecha" class="fw-bold">Seleccionar fecha:</label>
+  <input
+    type="date"
+    id="fecha"
+    class="form-control w-auto"
+    [(ngModel)]="fechaSeleccionada"
+    (change)="obtenerBoletasPorFecha()"
+  />
+</div>
 <div class="boletas-container">
+
+
+
   <div class="card" *ngFor="let boleta of boletas">
     <button class="btn btn-danger" (click)="eliminarBoleta(boleta.id)">&times;</button>
     <div class="card-body">
