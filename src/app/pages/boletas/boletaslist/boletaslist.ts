@@ -13,8 +13,8 @@ import Swal from 'sweetalert2';
 })
 export class Boletaslist {
     boletas: Boleta[] = [];
-    total = []
-    
+    total = [];
+    input= '';
     boletasOriginales: any[] = [];
     busquedaNumero = ""
     fechaSeleccionada: string = '';
@@ -30,6 +30,21 @@ export class Boletaslist {
 
   }
   
+filtro() {
+  const texto = this.input.trim().toLowerCase();
+
+  // Si no hay texto, restaurar la lista completa
+  if (!texto) {
+    this.boletas = [...this.boletasOriginales]; // Mostrar todas
+    return;
+  }
+
+  // Filtrar desde los datos originales
+  this.boletas = this.boletasOriginales.filter(boleta =>
+    boleta.id.toString().toLowerCase().includes(texto)
+  );
+}
+
 
 obtenerBoletasPorFecha() {
   console.log('📅 Fecha seleccionada:', this.fechaSeleccionada);
