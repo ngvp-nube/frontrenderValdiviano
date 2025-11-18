@@ -18,17 +18,17 @@ export interface Producto {
 })
 export class Api {
   //produccion
-  private apiUrl = 'http://192.168.1.100:8000/api/producto/';
-    private loginUrl = 'http://192.168.1.100:8000/api/login/';
-    private searchnUrl = 'http://192.168.1.100:8000/api/producto';
-    private urlboleta = 'http://192.168.1.100:8000/api/crear-boleta/';
-    private urlboletass = 'http://192.168.1.100:8000/api/boleta/';
-    private urlConabilidad = 'http://192.168.1.100:8000/contabilidad/total/?';
-    private urldeleteBoleta = 'http://192.168.1.100:8000/api/boletas/eliminar/';
-    private urlsearchBoleta = 'http://192.168.1.100:8000/boletas/';
-    private urlconta = 'http://192.168.1.100:8000';
-    private apiImprimir = 'http://192.168.1.100:8000/api/imprimir-boleta/';
-    private urluultimoid = 'http://192.168.1.100:8000/boleta/ultimo-id/';
+  private apiUrl = 'http://192.168.1.103:8000/api/producto/';
+    private loginUrl = 'http://192.168.1.103:8000/api/login/';
+    private searchnUrl = 'http://192.168.1.103:8000/api/producto';
+    private urlboleta = 'http://192.168.1.103:8000/api/crear-boleta/';
+    private urlboletass = 'http://192.168.1.103:8000/api/boleta/';
+    private urlConabilidad = 'http://192.168.1.103:8000/contabilidad/total/?';
+    private urldeleteBoleta = 'http://192.168.1.103:8000/api/boletas/eliminar/';
+    private urlsearchBoleta = 'http://192.168.1.103:8000/boletas/';
+    private urlconta = 'http://192.168.1.103:8000';
+    private apiImprimir = 'http://192.168.1.103:8000/api/imprimir-boleta/';
+    private urluultimoid = 'http://192.168.1.103:8000/boleta/ultimo-id/';
 //prueba local
 // private apiUrl = 'http://localhost:8000/api/producto/';
 //     private loginUrl = 'http://localhost:8000/api/login/';
