@@ -73,17 +73,22 @@
   color: #495057;
 }
 
-/* Lista de detalles */
-ul.list-group li {
+/* Lista de detalles (scopeada a boletas para no afectar otras listas) */
+.boletas-container ul.list-group {
+  margin-left: -8px; /* desplaza la lista un poco a la izquierda dentro del ticket */
+  padding-left: 4px; /* espacio interior reducido */
+}
+
+.boletas-container ul.list-group li {
   display: flex;
   justify-content: space-between;
-  padding: 6px 12px;
-  font-size: 0.9rem;
+  padding: 6px 6px; /* menos padding lateral para acercar los elementos */
+  font-size: 0.8rem;
   border-bottom: 1px solid #e0e0e0;
   background-color: #f8f9fa;
 }
 
-ul.list-group li:last-child {
+.boletas-container ul.list-group li:last-child {
   border-bottom: none;
 }
 
@@ -99,3 +104,4 @@ ul.list-group li:last-child {
     grid-template-columns: 1fr;
   }
 }
+

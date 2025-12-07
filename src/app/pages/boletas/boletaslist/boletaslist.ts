@@ -24,6 +24,52 @@ export class Boletaslist {
     
   }
 
+  /**
+   * Formatea la cantidad según el tipo de venta.
+   * Si es 'gramos' devuelve la parte entera (antes del punto).
+   * En otros casos devuelve la cantidad tal cual.
+   */
+  formatCantidad(cantidad: any, tipoVenta: string): string {
+    // Si es venta por gramos, mostrar la parte entera
+    if (tipoVenta && tipoVenta.toLowerCase().includes('gram')) {
+      const num = Number(String(cantidad).replace(',', '.'));
+      if (isNaN(num)) return String(cantidad ?? '');
+      return String(Math.floor(num));
+    }
+
+    // Normalizar y formatear: si la cantidad es un número terminando en .000 mostrar sólo la parte entera
+    const s = String(cantidad ?? '').trim();
+    if (s === '') return '';
+
+    // Reemplazar coma por punto para parseo
+    const normalized = s.replace(/,/g, '.');
+    const num = Number(normalized);
+    if (!isNaN(num)) {
+      // Si es entero (dentro de tolerancia) devolver sin decimales
+      if (Math.abs(num - Math.round(num)) < 1e-9) return String(Math.round(num));
+      // En otro caso, eliminar ceros a la derecha innecesarios
+      let out = String(normalized);
+      if (out.indexOf('.') >= 0) {
+        out = out.replace(/0+$/g, ''); // quitar ceros finales
+        out = out.replace(/\.$/, ''); // quitar punto final si quedó
+      }
+      return out;
+    }
+
+    // Si no es numérico, devolver como cadena
+    return s;
+  }
+
+  /**
+   * Devuelve la etiqueta corta para el tipo de venta:
+   * - 'G' si contiene 'gram'
+   * - 'cant' en cualquier otro caso
+   */
+  tipoLabel(tipoVenta: string): string {
+    if (!tipoVenta) return 'cant';
+    return tipoVenta.toLowerCase().includes('gram') ? 'G' : 'C';
+  }
+
     ngOnInit(): void {
       this.ListarApi();
       console.log(this.boletas);

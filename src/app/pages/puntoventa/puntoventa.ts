@@ -320,8 +320,16 @@ imprimirapi() {
     })),
     total: Math.round(total)
   };
+ if (Object.values(this.productoForm.value).some(v => v)) {
+  Swal.fire({
+  title: 'Atención',
+  text: 'Tienes una venta sin ser agregada al carrito verifica la informacion.',
+  icon: 'warning',
+  confirmButtonText: 'OK'
+});
 
-  // ✅ Mostrar confirmación con enfoque automático en el botón
+} else {
+    // ✅ Mostrar confirmación con enfoque automático en el botón
   Swal.fire({
     title: this.boletaCargadaDesdeBusqueda ? '¿Deseas reimprimir esta boleta?' : '¿Deseas imprimir la boleta?',
     icon: 'question',
@@ -414,6 +422,8 @@ imprimirapi() {
       });
     }
   });
+}
+
 }
 
 

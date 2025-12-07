@@ -21,19 +21,34 @@
 
 
 
-  <div class="card" *ngFor="let boleta of boletas">
-    <button class="btn btn-danger" (click)="eliminarBoleta(boleta.id)">&times;</button>
-    <div class="card-body">
-      <h5 class="card-title text-primary"><i class="bi bi-receipt"></i> Boleta N° {{ boleta.id }}</h5>
-      <p class="mb-2"><strong>Fecha:</strong> {{ boleta.fecha }}</p>
-      <p><strong>Total:</strong> ${{ boleta.total | number:'1.0-0' }}</p>
-      <hr>
-      <ul class="list-group list-group-flush small">
-        <li class="list-group-item px-0 py-1 d-flex justify-content-between" *ngFor="let item of boleta.detalles">
-          <span>{{ item.nombre }}</span>
-          <span>${{ item.total | number:'1.0-0' }}</span>
-        </li>
-      </ul>
-    </div>
+<div class="card" *ngFor="let boleta of boletas">
+  <button class="btn btn-danger" (click)="eliminarBoleta(boleta.id)">&times;</button>
+
+  <div class="card-body">
+    <h5 class="card-title text-primary">
+      <i class="bi bi-receipt"></i> Boleta N° {{ boleta.id }}
+    </h5>
+
+    <p class="mb-2"><strong>Fecha:</strong> {{ boleta.fecha }}</p>
+    <p><strong>Total:</strong> ${{ boleta.total | number:'1.0-0' }}</p>
+
+    <hr>
+
+
+
+    <!-- Detalles -->
+    <ul class="list-group receipt-items">
+      <li class="list-group-item" *ngFor="let item of boleta.detalles">
+        <span class="item-name">{{ item.nombre }}</span>
+         <span class="item-qty">{{ formatCantidad(item.cantidad, item.tipo_venta) }}</span>
+        <span class="item-type">{{ tipoLabel(item.tipo_venta) }}</span>
+       
+        <span class="item-total"><strong>${{ item.total | number:'1.0-0' }}</strong></span>
+      </li>
+    </ul>
+
   </div>
+</div>
+
+  
 </div>
