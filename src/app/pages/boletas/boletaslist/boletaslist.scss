@@ -7,6 +7,11 @@
   padding: 0; /* Para que no rompa el padding del main-content */
   margin: 0;
 }
+.item-name {
+  width: 150px;          /* el ancho que tú quieras */
+  word-break: break-word;
+}
+
 
 /* Tarjetas de boletas cuadradas y modernas */
 .card {

@@ -30,12 +30,12 @@
             <div class="col-md-2">
               <label class="form-label fw-semibold">Cantidad</label>
               <input type="text" class="form-control form-control-sm" *ngIf="inputGramos"
-  formControlName="cantidad" #cantidadGramos placeholder="gramos"
-  (keydown.enter)="calcularSubtotalYEnfocarTotal()">
+                formControlName="cantidad" #cantidadGramos placeholder="gramos"
+                (keydown.enter)="calcularSubtotalYEnfocarTotal()">
 
-<input type="number" class="form-control form-control-sm" *ngIf="inputCantidad"
-  formControlName="cantidad" #cantidadUnidad placeholder="cantidad"
-  (keydown.enter)="calcularSubtotalYEnfocarTotal()">
+              <input type="number" class="form-control form-control-sm" *ngIf="inputCantidad"
+                formControlName="cantidad" #cantidadUnidad placeholder="cantidad"
+                (keydown.enter)="calcularSubtotalYEnfocarTotal()">
             </div>
 
             <div class="col-md-2">
@@ -54,75 +54,19 @@
                 placeholder="Ej: Producto sin lactosa..."></textarea>
             </div>
           </div> -->
+          <h4>Total ${{ getTotalGeneral() | number:'1.0-0' }}</h4>
+         
         </div>
+        
       
     </div>
 
-    <!-- Botón agregar producto -->
-    <div class="text-end mt-2" >
-      <button type="button"  [disabled]="!productoForm" class="btn btn-success btn-sm" #addprod  (click)="agregarProducto()" >
-        <i class="bi bi-plus-circle" ></i> Agregar
-      </button>
-    </div>
+   
   </div>
 
   
 </form>
 
-<!-- Tabla para mostrar lista de productos agregados -->
-<div class="mt-5">
-    <!-- Total general -->
-   <h4>Total ${{ getTotalGeneral() | number:'1.0-0' }}</h4>
-  
-  <!-- Botón de imprimir -->
-   <div class="d-flex justify-content-end gap-2 mt-3 no-print">
-  <button type="button" class="btn btn-primary btn-sm px-4 rounded-3 shadow"
-    (click)="imprimirapi()" #btnImprimir>
-    <i class="bi bi-printer me-2"></i> Imprimir
-  </button>
-
-   
-
- 
-  <input   #inputBoleta [(ngModel)]="numeroBoleta" class="form-control form-control-sm w-auto" placeholder="Buscar boleta..." (keydown.enter)="buscarBoleta(inputBoleta.value)" />
-</div>
-
-
- <table class="table">
-  <thead>
-    <tr>
-      <th>Nombre</th>
-      <!-- <th>Código</th> -->
-      <th>Precio Unitario</th>
-      <th>Cantidad</th>
-      <th>Total</th>
-      <th>Acciones</th>  <!-- Nueva columna -->
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let prod of productosGuardados; let i = index">
-      <td>{{ prod.nombre }}</td>
-      <!-- <td>{{ prod.codigo }}</td> -->
-      <td> ${{ prod.precio }}</td>
-      <td>{{ prod.tipo_venta === 'gramos' ? (prod.cantidad + ' g') : (prod.cantidad + ' unid.') }}</td>
-      <td>$ {{ calcularTotal(prod) | number:'1.0-0'}}</td>
-      <td>
-        <button class="btn btn-edit" (click)="editarProducto(i)">
-          <i class="bi bi-pencil"></i> Editar
-        </button>
-        <button class="btn btn-delete" (click)="eliminarProducto(i)">
-          <i class="bi bi-trash"></i> Eliminar
-        </button>
-      </td>
-    </tr>
-    <tr *ngIf="productosGuardados.length === 0">
-  <td colspan="5" class="text-center">No hay productos agregados</td>
-</tr>
-
-  </tbody>
-</table>
-
-</div>
 
 <div class="d-flex justify-content-center">
   <div id="boleta-imprimible" class="ticket p-4">
@@ -163,6 +107,68 @@
     <p class="text-center ">¡Gracias por su compra!</p>
   </div>
 </div>
+
+<!-- Tabla para mostrar lista de productos agregados -->
+<div class="mt-5">
+    <!-- Total general -->
+   
+  
+  <!-- Botón de imprimir -->
+
+
+
+ <table class="table">
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <!-- <th>Código</th> -->
+      <th>Precio Unitario</th>
+      <th>Cantidad</th>
+      <th>Total</th>
+      <th>Acciones</th>  <!-- Nueva columna -->
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let prod of productosGuardados; let i = index">
+      <td>{{ prod.nombre }}</td>
+      <!-- <td>{{ prod.codigo }}</td> -->
+      <td> ${{ prod.precio }}</td>
+      <td>{{ prod.tipo_venta === 'gramos' ? (prod.cantidad + ' g') : (prod.cantidad + ' unid.') }}</td>
+      <td>$ {{ calcularTotal(prod) | number:'1.0-0'}}</td>
+      <td>
+        <button class="btn btn-edit" (click)="editarProducto(i)">
+          <i class="bi bi-pencil"></i> 
+        </button>
+        <button class="btn btn-delete" (click)="eliminarProducto(i)">
+          <i class="bi bi-trash"></i> 
+        </button>
+      </td>
+    </tr>
+    <tr *ngIf="productosGuardados.length === 0">
+  <td colspan="5" class="text-center">No hay productos agregados</td>
+</tr>
+
+  </tbody>
+</table>
+   <div class="d-flex justify-content-end gap-2 mt-3 no-print">
+  <button type="button" class="btn btn-primary btn-sm px-4 rounded-3 shadow"
+    (click)="imprimirapi()" #btnImprimir>
+    <i class="bi bi-printer me-2"></i> Imprimir
+  </button>
+
+   
+
+ 
+  <input   #inputBoleta [(ngModel)]="numeroBoleta" class="form-control form-control-sm w-auto" placeholder="Buscar boleta..." (keydown.enter)="buscarBoleta(inputBoleta.value)" />
+</div>
+
+</div>
+ <!-- Botón agregar producto -->
+    <div class="text-end mt-2" >
+      <button type="button"  [disabled]="!productoForm" class="btn btn-success btn-sm" #addprod  (click)="agregarProducto()" >
+        <i class="bi bi-plus-circle" ></i> Agregar
+      </button>
+    </div>
 
 
 <app-buscar-producto-modal

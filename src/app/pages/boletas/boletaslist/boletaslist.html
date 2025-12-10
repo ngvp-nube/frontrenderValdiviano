@@ -39,7 +39,7 @@
     <!-- Detalles -->
     <ul class="list-group receipt-items">
       <li class="list-group-item" *ngFor="let item of boleta.detalles">
-        <span class="item-name">{{ item.nombre }}</span>
+       <span class="item-name">{{ item.nombre }}</span>
          <span class="item-qty">{{ formatCantidad(item.cantidad, item.tipo_venta) }}</span>
         <span class="item-type">{{ tipoLabel(item.tipo_venta) }}</span>
        
